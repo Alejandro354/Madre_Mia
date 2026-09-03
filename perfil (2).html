@@ -1,0 +1,27 @@
+{% extends "frank/_shell.html" %}
+{% block title %}Perfil de {{ p['nombres'] }} {{ p['apellidos'] }}{% endblock %}
+{% block panel %}
+<div class="panel">
+  <h2>Datos del perfil</h2>
+  <div class="profile-grid">
+    <div class="profile-photo{{ ' has-photo' if p['foto'] }}" {% if p['foto'] %}onclick="abrirLightbox('{{ url_for('media_perfil', nombre_archivo=p['foto']) }}')"{% endif %}>
+      {% if p['foto'] %}
+        <img src="{{ url_for('media_perfil', nombre_archivo=p['foto']) }}" alt="Foto de {{ p['nombres'] }}">
+      {% else %}
+        <div class="avatar-xl"><span>{{ p['nombres'][0] }}{{ p['apellidos'][0] }}</span></div>
+      {% endif %}
+    </div>
+    <dl class="field-list">
+      <div><dt>Nombres</dt><dd>{{ p['nombres'] }}</dd></div>
+      <div><dt>Apellidos</dt><dd>{{ p['apellidos'] }}</dd></div>
+      <div><dt>Tipo de documento</dt><dd>{{ p['tipo_documento'] }}</dd></div>
+      <div><dt>Documento</dt><dd>{{ p['documento'] }}</dd></div>
+      <div><dt>Teléfono</dt><dd>{{ p['telefono'] or '—' }}</dd></div>
+      <div><dt>Correo</dt><dd>{{ p['email'] }}</dd></div>
+      <div><dt>Cohorte</dt><dd>{{ p['cohorte'] }}</dd></div>
+      <div><dt>Estado</dt><dd><span class="estado-pill estado-{{ p['estado']|lower|replace(' ', '-') }}">{{ p['estado'] }}</span></dd></div>
+    </dl>
+  </div>
+  <p class="hint">Estos datos los administra el propio practicante desde su portal (Wil). Aquí solo puedes consultarlos.</p>
+</div>
+{% endblock %}

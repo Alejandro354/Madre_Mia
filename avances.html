@@ -1,0 +1,35 @@
+{% extends "wil/_shell.html" %}
+{% block title %}Cargar avances{% endblock %}
+{% block panel %}
+<div class="panel">
+  <h2>Cargar avances</h2>
+  <form method="post" action="{{ url_for('wil_subir_avance') }}" enctype="multipart/form-data" class="stacked-form">
+    <input type="text" name="descripcion" placeholder="Describe brevemente el avance…" required>
+    <div class="inline-form">
+      <input type="file" name="archivo" accept=".pdf,.docx,.pptx,.xlsx,.jpg,.jpeg,.png" required>
+      <button type="submit" class="btn-primary">Subir avance</button>
+    </div>
+  </form>
+  <p class="hint">Formatos permitidos: PDF, DOCX, PPTX, XLSX, JPG, PNG · Máximo 10 MB. Frank podrá revisar y gestionar estos archivos.</p>
+
+  {% if avances %}
+  <ul class="record-list">
+    {% for a in avances %}
+    <li>
+      <span class="tag-file">{{ a['tipo']|upper }}</span>
+      <div class="grow">
+        <p>{{ a['descripcion'] }}</p>
+        <span class="muted">{{ a['nombre_original'] }} · {{ a['creado_en'] }}</span>
+      </div>
+      <a class="btn-ghost small" href="{{ url_for('wil_ver_avance', avance_id=a['id']) }}" target="_blank">Ver</a>
+      <form method="post" action="{{ url_for('wil_eliminar_avance', avance_id=a['id']) }}" onsubmit="return confirm('¿Eliminar este avance? Esta acción no se puede deshacer.');">
+        <button type="submit" class="btn-ghost small danger">Eliminar</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">Aún no has cargado avances.</p>
+  {% endif %}
+</div>
+{% endblock %}

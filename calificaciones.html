@@ -1,0 +1,22 @@
+{% extends "wil/_shell.html" %}
+{% block title %}Mis calificaciones{% endblock %}
+{% block panel %}
+<div class="panel">
+  <h2>Mis calificaciones</h2>
+  {% if notas_por_periodo %}
+    {% for periodo, notas in notas_por_periodo.items() %}
+    <h3 class="subhead">{{ periodo }}</h3>
+    <table class="data-table">
+      <thead><tr><th>Criterio</th><th>Valor</th></tr></thead>
+      <tbody>
+        {% for n in notas %}
+        <tr><td>{{ n['criterio'] }}</td><td><strong>{{ '%.1f'|format(n['valor']) }}</strong></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endfor %}
+  {% else %}
+  <p class="muted">Todavía no tienes calificaciones registradas.</p>
+  {% endif %}
+</div>
+{% endblock %}

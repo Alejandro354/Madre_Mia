@@ -1,0 +1,28 @@
+{% extends "frank/_shell.html" %}
+{% block title %}Avances · {{ p['nombres'] }} {{ p['apellidos'] }}{% endblock %}
+{% block panel %}
+<div class="panel">
+  <h2>Avances cargados por el practicante</h2>
+  <p class="hint">Estos archivos los sube el practicante desde su portal. Como administrador, puedes verlos o eliminarlos.</p>
+
+  {% if avances %}
+  <ul class="record-list">
+    {% for a in avances %}
+    <li>
+      <span class="tag-file">{{ a['tipo']|upper }}</span>
+      <div class="grow">
+        <p>{{ a['descripcion'] }}</p>
+        <span class="muted">{{ a['nombre_original'] }} · {{ a['creado_en'] }}</span>
+      </div>
+      <a class="btn-ghost small" href="{{ url_for('frank_ver_avance', avance_id=a['id']) }}" target="_blank">Ver</a>
+      <form method="post" action="{{ url_for('frank_eliminar_avance', avance_id=a['id']) }}" onsubmit="return confirm('¿Eliminar este avance?');">
+        <button type="submit" class="btn-ghost small danger">Eliminar</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">El practicante aún no ha cargado avances.</p>
+  {% endif %}
+</div>
+{% endblock %}

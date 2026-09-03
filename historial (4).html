@@ -1,0 +1,23 @@
+{% extends "frank/_shell.html" %}
+{% block title %}Historial · {{ p['nombres'] }} {{ p['apellidos'] }}{% endblock %}
+{% block panel %}
+<div class="panel">
+  <h2>Historial de seguimiento</h2>
+  {% if historial %}
+  <ul class="timeline">
+    {% for h in historial %}
+    <li>
+      <span class="dot"></span>
+      <div>
+        <strong>{{ h['evento'] }}</strong>
+        <p class="muted">{{ h['descripcion'] }}</p>
+        <span class="muted small">{{ h['creado_en'] }}</span>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">Sin eventos registrados todavía.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "wil/_shell.html" %}
+{% block title %}Editar mi perfil{% endblock %}
+{% block panel %}
+<div class="panel">
+  <h2>Editar mi perfil</h2>
+  <form method="post" action="{{ url_for('wil_perfil_editar') }}" enctype="multipart/form-data" class="stacked-form">
+    <label>Foto de perfil
+      <input type="file" name="foto" accept=".jpg,.jpeg,.png,.webp">
+    </label>
+    <p class="hint">JPG, PNG o WEBP · Máximo 10 MB. Se recorta automáticamente para verse bien en tu perfil.</p>
+
+    <div class="form-row">
+      <label>Nombres
+        <input type="text" name="nombres" value="{{ p['nombres'] }}" required>
+      </label>
+      <label>Apellidos
+        <input type="text" name="apellidos" value="{{ p['apellidos'] }}" required>
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label>Tipo de documento
+        <select name="tipo_documento" required>
+          {% for t in tipos %}
+          <option value="{{ t }}" {{ 'selected' if p['tipo_documento']==t }}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Documento
+        <input type="text" name="documento" value="{{ p['documento'] }}" required>
+      </label>
+    </div>
+
+    <label>Teléfono
+      <input type="text" name="telefono" value="{{ p['telefono'] or '' }}">
+    </label>
+
+    <div class="inline-form">
+      <button type="submit" class="btn-primary">Guardar cambios</button>
+      <a class="btn-ghost" href="{{ url_for('wil_perfil') }}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

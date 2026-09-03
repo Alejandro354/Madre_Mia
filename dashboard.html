@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Panel Frank · Gestión y evaluación{% endblock %}
+{% block content %}
+<section class="page frank">
+  <header class="page-head">
+    <span class="module-badge">Frank</span>
+    <div class="grow">
+      <h1>Gestión y evaluación de practicantes</h1>
+      <p class="lead">Busca y filtra para dar seguimiento al progreso de cada practicante.</p>
+    </div>
+    <a class="btn-ghost" href="{{ url_for('frank_notas_masivo_pagina') }}">Carga masiva de notas →</a>
+  </header>
+
+  <div class="filter-bar">
+    <input type="text" id="f-nombre" placeholder="Buscar por nombre o documento…" autocomplete="off">
+    <select id="f-estado">
+      <option value="">Todos los estados</option>
+      {% for e in estados %}<option value="{{ e }}">{{ e }}</option>{% endfor %}
+    </select>
+    <select id="f-cohorte">
+      <option value="">Todas las cohortes</option>
+      {% for c in cohortes %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+    </select>
+    <button type="button" class="btn-ghost" onclick="limpiarFiltros()">Limpiar</button>
+    <span class="filter-count" id="filter-count"></span>
+  </div>
+
+  <div class="grid-cards" id="tabla-practicantes">
+    {% for p in practicantes %}
+    <div class="practicante-card"
+         data-nombre="{{ p['nombres']|lower }} {{ p['apellidos']|lower }} {{ p['documento'] }}"
+         data-estado="{{ p['estado'] }}"
+         data-cohorte="{{ p['cohorte'] }}">
+      <div class="practicante-top">
+        <div class="avatar-sm">
+          {% if p['foto'] %}
+            <img src="{{ url_for('media_perfil', nombre_archivo=p['foto']) }}" alt="">
+          {% else %}
+            <span>{{ p['nombres'][0] }}{{ p['apellidos'][0] }}</span>
+          {% endif %}
+        </div>
+        <div class="grow">
+          <h3>{{ p['nombres'] }} {{ p['apellidos'] }}</h3>
+          <p class="muted small">Doc. {{ p['documento'] }} · {{ p['cohorte'] }}</p>
+        </div>
+        <span class="estado-pill estado-{{ p['estado']|lower|replace(' ', '-') }}">{{ p['estado'] }}</span>
+      </div>
+      <a class="btn-primary full" href="{{ url_for('frank_perfil', pid=p['id']) }}">Perfil</a>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="empty-msg" id="empty-msg" hidden>No hay practicantes que coincidan con el filtro.</p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const nombreInput = document.getElementById('f-nombre');
+  const estadoSelect = document.getElementById('f-estado');
+  const cohorteSelect = document.getElementById('f-cohorte');
+  const tarjetas = Array.from(document.querySelectorAll('.practicante-card'));
+  const emptyMsg = document.getElementById('empty-msg');
+  const countEl = document.getElementById('filter-count');
+
+  function normalizar(texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function aplicarFiltros() {
+    const nombre = normalizar(nombreInput.value.trim());
+    const estado = estadoSelect.value;
+    const cohorte = cohorteSelect.value;
+    let visibles = 0;
+
+    tarjetas.forEach(card => {
+      const coincideNombre = !nombre || normalizar(card.dataset.nombre).includes(nombre);
+      const coincideEstado = !estado || card.dataset.estado === estado;
+      const coincideCohorte = !cohorte || card.dataset.cohorte === cohorte;
+      const visible = coincideNombre && coincideEstado && coincideCohorte;
+      card.hidden = !visible;
+      if (visible) visibles++;
+    });
+
+    emptyMsg.hidden = visibles !== 0;
+    countEl.textContent = `${visibles} de ${tarjetas.length}`;
+  }
+
+  function limpiarFiltros() {
+    nombreInput.value = '';
+    estadoSelect.value = '';
+    cohorteSelect.value = '';
+    aplicarFiltros();
+  }
+
+  [nombreInput].forEach(el => el.addEventListener('input', aplicarFiltros));
+  [estadoSelect, cohorteSelect].forEach(el => el.addEventListener('change', aplicarFiltros));
+  aplicarFiltros();
+</script>
+{% endblock %}

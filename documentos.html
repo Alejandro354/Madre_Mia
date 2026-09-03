@@ -1,0 +1,23 @@
+{% extends "wil/_shell.html" %}
+{% block title %}Mis documentos{% endblock %}
+{% block panel %}
+<div class="panel">
+  <h2>Mis documentos</h2>
+  <p class="hint">Estos archivos los sube el equipo de acompañamiento. Puedes verlos y descargarlos, pero no modificarlos.</p>
+  {% if documentos %}
+  <ul class="record-list">
+    {% for d in documentos %}
+    <li>
+      <span class="tag-file">{{ d['tipo']|upper }}</span>
+      <span class="grow">{{ d['nombre_original'] }}</span>
+      <span class="muted">{{ d['creado_en'] }}</span>
+      <a class="btn-ghost small" href="{{ url_for('wil_ver_documento', doc_id=d['id']) }}" target="_blank">Ver</a>
+      <a class="btn-ghost small" href="{{ url_for('wil_descargar_documento', doc_id=d['id']) }}">Descargar</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">Frank aún no ha cargado documentos a tu perfil.</p>
+  {% endif %}
+</div>
+{% endblock %}

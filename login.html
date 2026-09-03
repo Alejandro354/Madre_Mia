@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Ingresar · Portal Wil{% endblock %}
+{% block content %}
+<section class="page-narrow">
+  <span class="module-badge">Wil</span>
+  <h1>Ingresa a tu portal</h1>
+  <p class="lead">Consulta tu perfil, documentos, calificaciones, avances e historial.</p>
+
+  <form method="post" action="{{ url_for('wil_login') }}" class="stacked-form login-form">
+    <label>Correo electrónico
+      <input type="email" name="email" placeholder="tucorreo@correo.com" required autofocus>
+    </label>
+    <label>Contraseña
+      <input type="password" name="password" placeholder="••••••••" required>
+    </label>
+    <button type="submit" class="btn-primary full">Iniciar sesión</button>
+  </form>
+
+  <div class="demo-box"><strong>Usuario de prueba:</strong> <code>mariana.zapata@correo.com</code> / <code>1234</code></div>
+</section>
+{% endblock %}

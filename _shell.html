@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page wil">
+  <header class="entity-head">
+    <div class="avatar-lg">
+      {% if p['foto'] %}
+        <img src="{{ url_for('media_perfil', nombre_archivo=p['foto']) }}" alt="Foto de {{ p['nombres'] }}">
+      {% else %}
+        <span>{{ p['nombres'][0] }}{{ p['apellidos'][0] }}</span>
+      {% endif %}
+    </div>
+    <div>
+      <h1>Hola, {{ p['nombres'] }}</h1>
+      <p class="lead-sm">{{ p['cohorte'] }} · <span class="estado-pill estado-{{ p['estado']|lower|replace(' ', '-') }}">{{ p['estado'] }}</span></p>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="{{ url_for('wil_perfil') }}" class="{{ 'is-active' if activo=='perfil' }}">Perfil</a>
+    <a href="{{ url_for('wil_documentos') }}" class="{{ 'is-active' if activo=='documentos' }}">Documentos</a>
+    <a href="{{ url_for('wil_avances') }}" class="{{ 'is-active' if activo=='avances' }}">Cargar avances</a>
+    <a href="{{ url_for('wil_calificaciones') }}" class="{{ 'is-active' if activo=='calificaciones' }}">Calificaciones</a>
+    <a href="{{ url_for('wil_historial') }}" class="{{ 'is-active' if activo=='historial' }}">Historial</a>
+  </nav>
+
+  {% block panel %}{% endblock %}
+</section>
+{% endblock %}
