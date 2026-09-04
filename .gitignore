@@ -1,0 +1,47 @@
+# ---------- Datos y archivos subidos ----------
+# La base contiene cuentas reales (correo y hash de contraseña) y las cargas
+# incluyen fotos de perfil y documentos de portafolio: datos personales.
+# Cada quien crea la suya con `python seed.py`.
+backend/app.db
+backend/*.db
+backend/uploads/
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---------- Node / Vite ----------
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# ---------- Entorno ----------
+.env
+.env.*
+!.env.example
+.figma.env
+
+# ---------- Editores y sistema operativo ----------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ---------- Logs ----------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
