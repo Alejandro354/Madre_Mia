@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { getFavorites, removeFavorite } from '../api/favorites'
 import Button from '../components/Button'
+import { FavoritesSkeleton } from '../components/Loaders'
 import Topbar from '../components/Topbar'
 
 function formatDate(iso) {
@@ -35,7 +36,7 @@ export default function Favorites() {
   }
 
   if (loading) {
-    return <div className="page-loading">Cargando...</div>
+    return <FavoritesSkeleton />
   }
 
   if (vacancies.length === 0) {

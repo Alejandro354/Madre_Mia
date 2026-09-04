@@ -12,6 +12,7 @@ import Button from '../components/Button'
 import ConfirmModal from '../components/ConfirmModal'
 import { DocIcon, FolderIcon, LinkIcon, PencilIcon, TrashIcon, UploadIcon } from '../components/icons'
 import Input from '../components/Input'
+import { PortfolioSkeleton } from '../components/Loaders'
 
 const PORTFOLIO_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
 const MAX_SIZE = 10 * 1024 * 1024
@@ -170,7 +171,7 @@ export default function PortfolioSection() {
   }
 
   if (loading) {
-    return null
+    return <PortfolioSkeleton />
   }
 
   const total = items.length

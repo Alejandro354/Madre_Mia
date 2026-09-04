@@ -5,6 +5,7 @@ import { apply } from '../api/applications'
 import { addFavorite, removeFavorite } from '../api/favorites'
 import { getVacancy } from '../api/vacancies'
 import Alert from '../components/Alert'
+import { VacancyDetailSkeleton } from '../components/Loaders'
 import Topbar from '../components/Topbar'
 import {
   ArrowLeftIcon,
@@ -131,7 +132,7 @@ export default function VacancyDetail() {
   }
 
   if (loading) {
-    return <div className="page-loading">Cargando...</div>
+    return <VacancyDetailSkeleton />
   }
 
   if (!vacancy) {

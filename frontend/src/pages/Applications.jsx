@@ -5,6 +5,7 @@ import { deleteApplication, getApplications } from '../api/applications'
 import { extractErrors } from '../api/client'
 import Alert from '../components/Alert'
 import ConfirmModal from '../components/ConfirmModal'
+import { ApplicationsSkeleton } from '../components/Loaders'
 import Topbar from '../components/Topbar'
 import { ChevronRightIcon, SearchIcon, TrashIcon } from '../components/icons'
 import { tileColor, tileInitial } from '../utils/tileColor'
@@ -84,7 +85,7 @@ export default function Applications() {
   }
 
   if (loading) {
-    return <div className="page-loading">Cargando...</div>
+    return <ApplicationsSkeleton />
   }
 
   return (

@@ -1,13 +1,14 @@
 import { Navigate } from 'react-router-dom'
 
 import { useAuth } from '../context/AuthContext'
+import { BrandLoader } from './Loaders'
 import Sidebar from './Sidebar'
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
 
   if (loading) {
-    return <div className="page-loading">Cargando...</div>
+    return <BrandLoader />
   }
 
   if (!user) {

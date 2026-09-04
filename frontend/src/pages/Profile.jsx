@@ -7,6 +7,7 @@ import Alert from '../components/Alert'
 import Button from '../components/Button'
 import { CameraIcon } from '../components/icons'
 import Input from '../components/Input'
+import { ProfileSkeleton } from '../components/Loaders'
 import ProfileView from '../components/ProfileView'
 import Topbar from '../components/Topbar'
 import { useAuth } from '../context/AuthContext'
@@ -122,7 +123,7 @@ export default function Profile() {
   }
 
   if (loading) {
-    return <div className="page-loading">Cargando...</div>
+    return <ProfileSkeleton />
   }
 
   const hasProfile = Boolean(form.fecha_nacimiento || form.telefono || form.institucion)

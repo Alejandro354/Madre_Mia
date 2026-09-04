@@ -58,12 +58,132 @@
   background-color: var(--primary);
 }
 
-.page-loading {
+/* ---------- Skeleton loaders ---------- */
+.sk {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background-color: var(--surface);
+  border-radius: 6px;
+}
+
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 24, 55, 0.09), transparent);
+  animation: sk-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes sk-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.sk--circle {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sk--chip {
+  border-radius: 999px;
+}
+
+/* Loader de arranque (bootstrap de autenticación). */
+.brand-loader {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background-color: var(--background);
+}
+
+.brand-loader-mark {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background-color: var(--primary);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  color: var(--text-secondary);
+}
+
+.brand-loader-mark svg {
+  width: 34px;
+  height: 34px;
+}
+
+.brand-loader-mark::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 26px;
+  border: 2px solid rgba(255, 24, 55, 0.4);
+  animation: brand-pulse 1.6s ease-out infinite;
+}
+
+@keyframes brand-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+.brand-loader-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.brand-loader-name-accent {
+  color: var(--primary);
+}
+
+.brand-loader-dots {
+  display: flex;
+  gap: 7px;
+}
+
+.brand-loader-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  animation: brand-dot 1.2s ease-in-out infinite;
+}
+
+.brand-loader-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.brand-loader-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes brand-dot {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 /* ---------- Sidebar ---------- */

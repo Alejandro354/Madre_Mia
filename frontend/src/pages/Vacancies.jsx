@@ -5,6 +5,7 @@ import { apply } from '../api/applications'
 import { addFavorite, removeFavorite } from '../api/favorites'
 import { getVacancies } from '../api/vacancies'
 import Alert from '../components/Alert'
+import { VacanciesSkeleton } from '../components/Loaders'
 import PerfNote from '../components/PerfNote'
 import Topbar from '../components/Topbar'
 import VacancyCard from '../components/VacancyCard'
@@ -121,7 +122,7 @@ export default function Vacancies() {
   }
 
   if (loading) {
-    return <div className="page-loading">Cargando...</div>
+    return <VacanciesSkeleton />
   }
 
   return (
