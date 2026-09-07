@@ -3,22 +3,12 @@
 // Mirrors the shape of content.es.js — keep both in sync.
 // =========================================================
 
-import feriaUniversitaria1 from '../assets/FeriaUniverisitaria1.jpg'
-import feriaUniversitaria2 from '../assets/FeriaUniverisitaria2.jpg'
-import feriaUniversitaria3 from '../assets/FeriaUniversitaria3.jpg'
-import voluntariadoLimpieza from '../assets/monica2.jpg'
-import voluntariadoSiembra from '../assets/VoluntariadoCadena.jpg'
-import premiacionCuentos from '../assets/PremiacionCuentos.jpg'
-import premiacionCuentos2 from '../assets/PremiacionCuentos (2).jpg'
-import exploracionTerritorios from '../assets/ExploracionTerritorios.jpg'
 import practicantes2 from '../assets/practicantes2.jpg'
 import equipoCadena from '../assets/Imagen1.jpg'
 import voluntariados from '../assets/voluntariados.jpg'
 import reunionCadena from '../assets/ReunionCadena.jpg'
 import historyVideo from '../assets/VideoJeronimo1.mp4'
 import marlonVideo from '../assets/VideoMarlon.mp4'
-import entrevistaRectorVideo from '../assets/Entrevista Rector.mp4'
-import entrevistaPersoneroVideo from '../assets/Entrevista Personero.mp4'
 
 export const ui = {
   locale: 'en-US',
@@ -141,109 +131,7 @@ export const blogPage = {
 }
 
 export const news = {
-  items: [
-    {
-      slug: 'orientacion-vocacional',
-      tag: 'University Fair',
-      date: 'Apr 2, 2026',
-      readTime: '3 min',
-      views: 842,
-      title: 'Exploring today to decide better tomorrow',
-      excerpt: 'From the Juan del Corral Museum, we joined the University Fair to see up close the impact this space has on young people and on the decisions they are beginning to make about their future.',
-      image: feriaUniversitaria2,
-      content: [
-        'From the Juan del Corral Museum, we joined the University Fair to see up close the impact this space has on young people and on the decisions they are beginning to make about their future.',
-        'More than a fair, it was a space to discover possibilities. Students were able to explore different education options, get their questions answered and start imagining which path they want to follow after finishing school.',
-        'From Social Innovation and the Juan del Corral Foundation, we were there observing and supporting this process, listening to both the students and the people who make these spaces possible.',
-      ],
-      videos: [
-        {
-          preview: feriaUniversitaria3,
-          video: entrevistaRectorVideo,
-          aspectRatio: '4 / 3',
-          caption: 'Interview with principal William Toro – University Fair',
-          content: [
-            'In this interview we spoke with William Toro, principal of the San Luis Gonzaga Educational Institution in Santa Fe de Antioquia, about the importance of holding spaces like the University Fair and the value they can have for young people from the municipality and nearby rural areas.',
-            'The video centers on how these initiatives can help students learn about new study options, discover different paths for their future and make better-informed decisions after finishing school.',
-            'A conversation that lets us understand, from an educational perspective, why bringing these opportunities closer to young people can make a difference in building their life plan.',
-          ],
-        },
-        {
-          preview: feriaUniversitaria1,
-          video: entrevistaPersoneroVideo,
-          aspectRatio: '4 / 3',
-          caption: 'Interview with Gerónimo – The voice of the students',
-          content: [
-            'In this interview we spoke with Gerónimo, student representative, to learn how young people experience this kind of activity and what it can mean for them to take part in a University Fair.',
-            'The video captures the students’ own perspective on the importance of learning about new study options, discovering different paths for their future and having spaces where they can get their questions answered and think about what they want to do after finishing school.',
-            'Listening to young people also helps us better understand their expectations and interests, and the importance of bringing them opportunities that can contribute to their decisions and to building their future.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'voluntariado-limpieza',
-      tag: 'Volunteering',
-      date: 'Apr 8, 2026',
-      readTime: '3 min',
-      views: 511,
-      title: 'Cleanup day in the Tropical Dry Forest',
-      excerpt: 'A group of volunteers collected waste and helped protect the biodiversity of this unique ecosystem in the region.',
-      image: voluntariadoLimpieza,
-      imagePosition: 'center 12%',
-      heroImage: voluntariadoSiembra,
-      heroCompact: true,
-      content: [
-        'A group of volunteers collected waste and helped protect the biodiversity of this unique ecosystem in the region.',
-      ],
-      secondaryHeading: 'Volunteering that transforms',
-      secondaryContent: [
-        'At CADENA’s Social Innovation, volunteering is a way to share knowledge, experience and skills to support the growth of other people. Our team members take part voluntarily in training, mentoring and skill-building activities, especially with young people connected to the Center of Excellence. In doing so, we aim to create spaces for learning, strengthen ties with the community and generate a positive impact that connects people with new opportunities.',
-      ],
-      highlights: [
-        {
-          title: 'We share knowledge',
-          description: 'Our volunteers contribute their experience and knowledge on different topics to support young people’s education.',
-        },
-        {
-          title: 'We support growth',
-          description: 'We also strengthen skills such as communication, teamwork, confidence and personal development.',
-        },
-      ],
-    },
-    {
-      slug: 'premiacion-cuentos',
-      tag: 'Story contest',
-      date: 'Apr 15, 2026',
-      readTime: '3 min',
-      views: 693,
-      title: '7th "Flying with Imagination" Story Contest',
-      excerpt: 'The Nurquí Rural Educational Institution held a new edition of the "Flying with Imagination" contest, an initiative that keeps the love of writing alive and encourages children, young people and adults to express their ideas through stories.',
-      image: premiacionCuentos2,
-      imagePosition: 'center top',
-      heroImage: premiacionCuentos,
-      content: [
-        'The Nurquí Rural Educational Institution held a new edition of the "Flying with Imagination" contest, an initiative that keeps the love of writing alive and encourages children, young people and adults to express their ideas through stories.',
-        'The Juan del Corral Foundation supported and accompanied this project, recognizing the importance of creating spaces where imagination, creativity and reading have a special place within the community.',
-        'Before the awards ceremony, different hands-on activities were held that made it possible to share, learn and enjoy writing together. Afterward, the participating stories were recognized, along with the effort of everyone who dared to create and tell their own stories.',
-        'More than awarding a story, this activity aims to remind us that writing is also a way to imagine, learn, express what we feel and keep our stories alive.',
-      ],
-      quote: 'When a story is written, an idea begins to fly.',
-    },
-    {
-      slug: 'exploracion-territorios',
-      tag: 'Territory exploration',
-      date: 'Apr 20, 2026',
-      readTime: '4 min',
-      views: 357,
-      title: 'Constellations: stories from my neighborhood',
-      excerpt: 'A group of young people toured their territory’s industrial heritage to reconstruct and tell the story of their neighborhood.',
-      image: exploracionTerritorios,
-      content: [
-        'A group of young people toured their territory’s industrial heritage to reconstruct and tell the story of their neighborhood.',
-      ],
-    },
-  ],
+  items: [],
 }
 
 export const footer = {

@@ -141,8 +141,8 @@
   }
 
   .navbar__links--open {
-    max-height: 420px;
-    overflow: visible;
+    max-height: 80vh;
+    overflow-y: auto;
     padding: 0.5rem 1.5rem 1.25rem;
   }
 

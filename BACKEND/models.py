@@ -4,6 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+_MESES_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+
+
+def format_date_es(dt):
+    return f'{dt.day:02d} {_MESES_ES[dt.month - 1]}, {dt.year}'
+
 
 class Admin(db.Model):
     __tablename__ = 'admins'
@@ -41,7 +47,7 @@ class BlogPost(db.Model):
             'quote': self.quote,
             'image': f'/uploads/{self.image_path}',
             'video': f'/uploads/{self.video_path}' if self.video_path else None,
-            'date': self.date.strftime('%d %b, %Y'),
+            'date': format_date_es(self.date),
             'views': self.views,
             'readTime': self.read_time,
             'source': 'dynamic',

@@ -3,22 +3,12 @@
 // Centralizar la copia aquí facilita editarla sin tocar UI.
 // =========================================================
 
-import feriaUniversitaria1 from '../assets/FeriaUniverisitaria1.jpg'
-import feriaUniversitaria2 from '../assets/FeriaUniverisitaria2.jpg'
-import feriaUniversitaria3 from '../assets/FeriaUniversitaria3.jpg'
-import voluntariadoLimpieza from '../assets/monica2.jpg'
-import voluntariadoSiembra from '../assets/VoluntariadoCadena.jpg'
-import premiacionCuentos from '../assets/PremiacionCuentos.jpg'
-import premiacionCuentos2 from '../assets/PremiacionCuentos (2).jpg'
-import exploracionTerritorios from '../assets/ExploracionTerritorios.jpg'
 import practicantes2 from '../assets/practicantes2.jpg'
 import equipoCadena from '../assets/Imagen1.jpg'
 import voluntariados from '../assets/voluntariados.jpg'
 import reunionCadena from '../assets/ReunionCadena.jpg'
 import historyVideo from '../assets/VideoJeronimo1.mp4'
 import marlonVideo from '../assets/VideoMarlon.mp4'
-import entrevistaRectorVideo from '../assets/Entrevista Rector.mp4'
-import entrevistaPersoneroVideo from '../assets/Entrevista Personero.mp4'
 
 export const ui = {
   locale: 'es-CO',
@@ -141,109 +131,7 @@ export const blogPage = {
 }
 
 export const news = {
-  items: [
-    {
-      slug: 'orientacion-vocacional',
-      tag: 'Feria Universitaria',
-      date: '02 abr, 2026',
-      readTime: '3 min',
-      views: 842,
-      title: 'Explorar hoy para decidir mejor mañana',
-      excerpt: 'Desde el Museo Juan del Corral, acompañamos la Feria Universitaria para conocer de cerca el impacto que este espacio tiene en los jóvenes y en las decisiones que comienzan a tomar sobre su futuro.',
-      image: feriaUniversitaria2,
-      content: [
-        'Desde el Museo Juan del Corral, acompañamos la Feria Universitaria para conocer de cerca el impacto que este espacio tiene en los jóvenes y en las decisiones que comienzan a tomar sobre su futuro.',
-        'Más que una feria, fue un espacio para descubrir posibilidades. Los estudiantes pudieron acercarse a diferentes opciones de formación, resolver dudas y empezar a imaginar qué camino quieren seguir después de terminar sus estudios.',
-        'Desde Innovación Social y la Fundación Juan del Corral, estuvimos presentes observando y acompañando este proceso, escuchando tanto a los estudiantes como a quienes hacen posible estos espacios.',
-      ],
-      videos: [
-        {
-          preview: feriaUniversitaria3,
-          video: entrevistaRectorVideo,
-          aspectRatio: '4 / 3',
-          caption: 'Entrevista al rector William Toro – Feria Universitaria',
-          content: [
-            'En esta entrevista conversamos con William Toro, rector de la Institución Educativa San Luis Gonzaga de Santa Fe de Antioquia, sobre la importancia de realizar espacios como la Feria Universitaria y el valor que pueden tener para los jóvenes del municipio y de las veredas cercanas.',
-            'El video gira alrededor de cómo estas iniciativas pueden ayudar a los estudiantes a conocer nuevas opciones de estudio, descubrir diferentes caminos para su futuro y tomar decisiones con mayor información después de terminar el colegio.',
-            'Una conversación que nos permite conocer, desde la mirada educativa, por qué acercar estas oportunidades a los jóvenes puede marcar una diferencia en la construcción de su proyecto de vida.',
-          ],
-        },
-        {
-          preview: feriaUniversitaria1,
-          video: entrevistaPersoneroVideo,
-          aspectRatio: '4 / 3',
-          caption: 'Entrevista a Gerónimo – La voz de los estudiantes',
-          content: [
-            'En esta entrevista conversamos con Gerónimo, representante de los estudiantes, para conocer cómo viven los jóvenes este tipo de actividades y qué significado puede tener para ellos participar en una Feria Universitaria.',
-            'El video recoge la mirada de los propios estudiantes sobre la importancia de conocer nuevas opciones de estudio, descubrir diferentes caminos para su futuro y tener espacios donde puedan resolver dudas y pensar en lo que quieren hacer después de terminar el colegio.',
-            'Escuchar a los jóvenes también nos permite entender mejor sus expectativas, intereses y la importancia de acercarles oportunidades que puedan aportar a sus decisiones y a la construcción de su futuro.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'voluntariado-limpieza',
-      tag: 'Voluntariado',
-      date: '08 abr, 2026',
-      readTime: '3 min',
-      views: 511,
-      title: 'Jornada de limpieza en el Bosque Seco Tropical',
-      excerpt: 'Un grupo de voluntarios recolectó residuos y ayudó a proteger la biodiversidad de este ecosistema único del territorio.',
-      image: voluntariadoLimpieza,
-      imagePosition: 'center 12%',
-      heroImage: voluntariadoSiembra,
-      heroCompact: true,
-      content: [
-        'Un grupo de voluntarios recolectó residuos y ayudó a proteger la biodiversidad de este ecosistema único del territorio.',
-      ],
-      secondaryHeading: 'Voluntariado que transforma',
-      secondaryContent: [
-        'En Innovación Social de CADENA, el voluntariado es una forma de compartir conocimientos, experiencias y habilidades para aportar al crecimiento de otras personas. Nuestros colaboradores participan de manera voluntaria en actividades de formación, acompañamiento y fortalecimiento de habilidades, especialmente con jóvenes vinculados al Centro de Excelencia. Así, buscamos crear espacios de aprendizaje, fortalecer los lazos con la comunidad y generar un impacto positivo que conecte a las personas con nuevas oportunidades.',
-      ],
-      highlights: [
-        {
-          title: 'Compartimos conocimiento',
-          description: 'Nuestros voluntarios aportan su experiencia y conocimientos en diferentes temas para apoyar la formación de los jóvenes.',
-        },
-        {
-          title: 'Acompañamos el crecimiento',
-          description: 'También fortalecemos habilidades como la comunicación, el trabajo en equipo, la confianza y el desarrollo personal.',
-        },
-      ],
-    },
-    {
-      slug: 'premiacion-cuentos',
-      tag: 'Concurso de cuentos',
-      date: '15 abr, 2026',
-      readTime: '3 min',
-      views: 693,
-      title: '7.º Concurso de Cuento "Volar con la Imaginación"',
-      excerpt: 'La Institución Educativa Rural Nurquí realizó una nueva edición del concurso "Volar con la Imaginación", una iniciativa que busca mantener vivo el gusto por la escritura y motivar a niños, jóvenes y adultos a expresar sus ideas por medio de cuentos e historias.',
-      image: premiacionCuentos2,
-      imagePosition: 'center top',
-      heroImage: premiacionCuentos,
-      content: [
-        'La Institución Educativa Rural Nurquí realizó una nueva edición del concurso "Volar con la Imaginación", una iniciativa que busca mantener vivo el gusto por la escritura y motivar a niños, jóvenes y adultos a expresar sus ideas por medio de cuentos e historias.',
-        'La Fundación Juan del Corral acompañó y apoyó este proyecto, reconociendo la importancia de crear espacios donde la imaginación, la creatividad y la lectura tengan un lugar especial dentro de la comunidad.',
-        'Antes de la premiación se realizaron diferentes actividades dinámicas que permitieron compartir, aprender y disfrutar alrededor de la escritura. Luego, se reconocieron los cuentos participantes y el esfuerzo de quienes se animaron a crear y contar sus propias historias.',
-        'Más que premiar un cuento, esta actividad busca recordar que escribir también es una forma de imaginar, aprender, expresar lo que sentimos y mantener vivas nuestras historias.',
-      ],
-      quote: 'Cuando una historia se escribe, una idea empieza a volar.',
-    },
-    {
-      slug: 'exploracion-territorios',
-      tag: 'Exploración de territorios',
-      date: '20 abr, 2026',
-      readTime: '4 min',
-      views: 357,
-      title: 'Constelaciones: historias de mi barrio',
-      excerpt: 'Un grupo de jóvenes recorrió el patrimonio industrial de su territorio para reconstruir y contar la memoria de su barrio.',
-      image: exploracionTerritorios,
-      content: [
-        'Un grupo de jóvenes recorrió el patrimonio industrial de su territorio para reconstruir y contar la memoria de su barrio.',
-      ],
-    },
-  ],
+  items: [],
 }
 
 export const footer = {

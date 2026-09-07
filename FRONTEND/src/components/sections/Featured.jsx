@@ -15,6 +15,8 @@ function Featured() {
   const timerRef = useRef(null)
 
   useEffect(() => {
+    if (total === 0) return undefined
+
     timerRef.current = setInterval(() => {
       setActive((prev) => (prev + 1) % total)
     }, AUTO_ADVANCE_MS)
@@ -33,7 +35,11 @@ function Featured() {
   const goPrev = () => goTo((active - 1 + total) % total)
   const goNext = () => goTo((active + 1) % total)
 
-  const slide = items[active]
+  if (total === 0) {
+    return <section id="historias" className="spotlight" />
+  }
+
+  const slide = items[Math.min(active, total - 1)]
 
   return (
     <section id="historias" className="spotlight">
