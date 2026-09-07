@@ -1,0 +1,116 @@
+.pya-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.pya-topbar__heading h1 {
+  font-size: 1.5rem;
+}
+
+.pya-topbar__heading p {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.pya-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.pya-topbar__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}
+
+.pya-topbar__search input {
+  border: none;
+  background: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--color-text-primary);
+  width: 110px;
+}
+
+.pya-topbar__icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.pya-topbar__icon-btn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.pya-topbar__icon-dot {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 1.5px solid var(--color-bg);
+}
+
+.pya-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-left: 0.6rem;
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.pya-topbar__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-bg-tag);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.pya-topbar__user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.pya-topbar__user-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.pya-topbar__user-role {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 720px) {
+  .pya-topbar__search input {
+    width: 70px;
+  }
+}

@@ -1,0 +1,110 @@
+.video-showcase {
+  background: var(--color-bg);
+  padding: var(--space-lg) 0 var(--space-2xl);
+}
+
+.video-showcase .section-header {
+  max-width: 560px;
+}
+
+.video-showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.video-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-dark);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.video-card__media-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+}
+
+.video-card__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.video-card--soon .video-card__media {
+  cursor: default;
+  filter: grayscale(0.15) brightness(0.85);
+}
+
+.video-card__play {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-dark-black);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.video-card__play svg {
+  margin-left: 2px;
+}
+
+.video-card__play:hover {
+  transform: scale(1.08);
+}
+
+.video-card__play--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.video-card__caption {
+  padding: 0.9rem var(--space-md) 1.1rem;
+  background: var(--color-dark);
+}
+
+.video-card__caption h3 {
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.video-card__caption p {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 860px) {
+  .video-showcase__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .video-showcase__grid {
+    grid-template-columns: 1fr;
+  }
+}

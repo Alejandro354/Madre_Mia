@@ -1,0 +1,21 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo__image {
+  display: block;
+  height: 44px;
+  width: auto;
+}
+
+.logo--sm .logo__image {
+  height: 34px;
+}
+
+.logo--dark {
+  background: #fff;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}

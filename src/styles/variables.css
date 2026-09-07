@@ -1,0 +1,62 @@
+/* =========================================================
+   CDN Social — Design Tokens
+   Fuente única de verdad para la colorimetría de marca.
+   ========================================================= */
+:root {
+  /* Color principal / acento */
+  --color-primary: #FF1837;
+  --color-primary-dark: #D91530;
+  --color-primary-light: #FF4D63;
+
+  /* Superficie oscura (barra lateral / secciones dark) */
+  --color-dark: #333333;
+  --color-dark-soft: #454545;
+  --color-dark-black: #1A1A1A;
+
+  /* Fondos */
+  --color-bg: #FFFFFF;
+  --color-bg-secondary: #F4F5FA;
+  --color-bg-tag: #FFEFEF;
+
+  /* Texto */
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-on-primary: #FFFFFF;
+  --color-text-on-dark: #FFFFFF;
+  --color-text-on-dark-muted: #B7B7B7;
+  --color-text-disabled: #9A9FB5;
+
+  /* Bordes y estados */
+  --color-border: #E9EBF4;
+  --color-btn-disabled-bg: #F0F2F7;
+
+  /* Gradiente de marca (logo CDN Social) */
+  --gradient-brand: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark-black) 100%);
+
+  /* Tipografía */
+  --font-heading: 'Poppins', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+  /* Espaciado */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+
+  /* Bordes redondeados */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(51, 51, 51, 0.06);
+  --shadow-md: 0 8px 24px rgba(51, 51, 51, 0.08);
+  --shadow-lg: 0 20px 45px rgba(51, 51, 51, 0.14);
+  --shadow-primary: 0 12px 24px rgba(255, 24, 55, 0.25);
+
+  /* Layout */
+  --container-width: 1200px;
+}

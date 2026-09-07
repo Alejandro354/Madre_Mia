@@ -1,0 +1,41 @@
+.pya-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.pya-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .pya-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .pya-page__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pya-page__empty,
+.pya-page__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 1.5rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.pya-page__placeholder svg {
+  color: var(--color-text-disabled);
+}
