@@ -1,4 +1,3 @@
-import Icon from '../ui/Icon.jsx'
 import Illustration from '../ui/Illustration.jsx'
 import { useContent } from '../../data/useContent.js'
 import fundadoresImg from '../../assets/fundadores1.jpeg'
@@ -32,9 +31,7 @@ function MvBlock({ data, reverse, caption, id, mainImage, mainImageAlt, secondar
           <ul className="mv-block__checklist">
             {data.points.map((point) => (
               <li key={point}>
-                <span className="mv-block__check">
-                  <Icon name="check" size={13} />
-                </span>
+                <span className="mv-block__check" />
                 {point}
               </li>
             ))}

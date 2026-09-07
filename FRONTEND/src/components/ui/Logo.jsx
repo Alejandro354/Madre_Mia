@@ -1,4 +1,4 @@
-import logoImg from '../../assets/logo-cdn.png'
+import logoImg from '../../assets/LogoOficial1.png'
 import './Logo.css'
 
 function Logo({ variant = 'light', size = 'md' }) {

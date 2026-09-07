@@ -7,6 +7,7 @@
   display: block;
   height: 44px;
   width: auto;
+  clip-path: inset(0 0 0 3px);
 }
 
 .logo--sm .logo__image {

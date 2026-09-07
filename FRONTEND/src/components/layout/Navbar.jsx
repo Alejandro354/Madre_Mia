@@ -26,7 +26,6 @@ function Navbar() {
       <div className="container navbar__inner">
         <a href="#inicio" className="navbar__brand">
           <Logo />
-          <span className="navbar__brand-divider" />
           <img src={fundacionLogo} alt="Fundación Juan del Corral" className="navbar__fundacion-logo" />
         </a>
 

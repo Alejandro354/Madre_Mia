@@ -79,16 +79,12 @@
 }
 
 .mv-block__check {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  margin-top: 0.1rem;
+  width: 10px;
+  height: 10px;
+  margin-top: 0.5rem;
   border-radius: 50%;
-  background: var(--color-bg-tag);
-  color: var(--color-primary);
+  background: var(--color-primary);
 }
 
 @media (max-width: 900px) {
