@@ -3,6 +3,7 @@ import Logo from '../ui/Logo.jsx'
 import Button from '../ui/Button.jsx'
 import LanguageSwitcher from '../ui/LanguageSwitcher.jsx'
 import { useContent } from '../../data/useContent.js'
+import { useAuth } from '../../context/AuthContext.jsx'
 import fundacionLogo from '../../assets/LOGO FUNDACIÓN.png'
 import { useHashRoute } from '../../hooks/useHashRoute.js'
 import './Navbar.css'
@@ -19,7 +20,9 @@ function Navbar() {
   const [open, setOpen] = useState(false)
   const path = useHashRoute()
   const { nav, ui } = useContent()
-  const activeHref = getActiveHref(nav.links, path)
+  const { isAuthenticated } = useAuth()
+  const links = isAuthenticated ? [...nav.links, { label: 'Admin', href: '#/admin' }] : nav.links
+  const activeHref = getActiveHref(links, path)
 
   return (
     <header className="navbar">
@@ -30,7 +33,7 @@ function Navbar() {
         </a>
 
         <nav className={`navbar__links ${open ? 'navbar__links--open' : ''}`}>
-          {nav.links.map((link) => (
+          {links.map((link) => (
             <a
               key={link.label}
               href={link.href}

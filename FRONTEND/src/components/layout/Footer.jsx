@@ -1,10 +1,15 @@
+import { useState } from 'react'
 import Logo from '../ui/Logo.jsx'
 import SocialIcon from '../ui/SocialIcon.jsx'
+import LoginModal from '../auth/LoginModal.jsx'
 import { useContent } from '../../data/useContent.js'
+import { useAuth } from '../../context/AuthContext.jsx'
 import './Footer.css'
 
 function Footer() {
-  const { footer, fundacionSocial } = useContent()
+  const { footer, fundacionSocial, ui } = useContent()
+  const { isAuthenticated, logout } = useAuth()
+  const [loginOpen, setLoginOpen] = useState(false)
 
   return (
     <footer className="footer">
@@ -44,6 +49,15 @@ function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <button
+                type="button"
+                className="footer__admin-link"
+                onClick={() => (isAuthenticated ? logout() : setLoginOpen(true))}
+              >
+                {isAuthenticated ? ui.logout : 'Admin'}
+              </button>
+            </li>
           </ul>
         </div>
       </div>
@@ -53,6 +67,8 @@ function Footer() {
           <span>&copy; {new Date().getFullYear()} CDN Social. {footer.rights}</span>
         </div>
       </div>
+
+      {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
     </footer>
   )
 }

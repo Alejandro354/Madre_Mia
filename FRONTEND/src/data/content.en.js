@@ -35,6 +35,8 @@ export const ui = {
   viewStory: 'View story',
   saveArticle: 'Save article',
   removeSaved: 'Remove from saved',
+  logout: 'Log out',
+  createBlog: 'Create post',
 }
 
 export const nav = {
@@ -44,8 +46,8 @@ export const nav = {
     { label: 'Stories', href: '#/historia' },
     { label: 'About Us', href: '#/nosotros' },
   ],
-  secondaryCta: { label: 'Track' },
-  primaryCta: { label: 'Log in' },
+  secondaryCta: { label: 'Interns' },
+  primaryCta: { label: 'Apply now' },
 }
 
 export const hero = {

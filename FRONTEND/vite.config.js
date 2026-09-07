@@ -6,6 +6,10 @@ export default defineConfig({
   server: {
     port: 5173,
     open: true,
+    proxy: {
+      '/api': 'http://localhost:5000',
+      '/uploads': 'http://localhost:5000',
+    },
     watch: {
       // OneDrive locks newly-synced files briefly, which crashes the
       // native fs watcher with EBUSY. Polling avoids relying on that.

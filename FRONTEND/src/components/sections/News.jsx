@@ -1,16 +1,19 @@
 import Illustration from '../ui/Illustration.jsx'
 import { useContent } from '../../data/useContent.js'
+import { useBlogPosts } from '../../hooks/useBlogPosts.js'
 import './News.css'
 
 function News() {
   const { news } = useContent()
+  const { posts } = useBlogPosts()
+  const items = [...posts, ...news.items]
 
   return (
     <section className="news">
       <div className="container">
         <div className="news__grid">
-          {news.items.map((item) => (
-            <article key={item.title} id={item.slug} className="news-card">
+          {items.map((item) => (
+            <article key={item.slug} id={item.slug} className="news-card">
               <a href={`#/blog/${item.slug}`} className="news-card__link">
                 <div className="news-card__thumb">
                   {item.image ? (

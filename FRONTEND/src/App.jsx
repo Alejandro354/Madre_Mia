@@ -3,6 +3,7 @@ import Nosotros from './pages/Nosotros.jsx'
 import Historia from './pages/Historia.jsx'
 import Blog from './pages/Blog.jsx'
 import BlogPost from './pages/BlogPost.jsx'
+import Admin from './pages/Admin.jsx'
 import PracticaYa from './pages/practicaya/PracticaYa.jsx'
 import ScrollFab from './components/ui/ScrollFab.jsx'
 import { useHashRoute } from './hooks/useHashRoute.js'
@@ -13,6 +14,10 @@ function App() {
   const page = (() => {
     if (path.startsWith('/practicaya')) {
       return <PracticaYa path={path} />
+    }
+
+    if (path.startsWith('/admin')) {
+      return <Admin />
     }
 
     if (path.startsWith('/nosotros')) {

@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import Illustration from '../ui/Illustration.jsx'
 import { useContent } from '../../data/useContent.js'
+import { useBlogPosts } from '../../hooks/useBlogPosts.js'
 import './Featured.css'
 
 const AUTO_ADVANCE_MS = 4200
 
 function Featured() {
   const { news, ui } = useContent()
+  const { posts } = useBlogPosts()
+  const items = [...posts, ...news.items]
   const [active, setActive] = useState(0)
-  const total = news.items.length
+  const total = items.length
   const timerRef = useRef(null)
 
   useEffect(() => {
@@ -30,12 +33,12 @@ function Featured() {
   const goPrev = () => goTo((active - 1 + total) % total)
   const goNext = () => goTo((active + 1) % total)
 
-  const slide = news.items[active]
+  const slide = items[active]
 
   return (
     <section id="historias" className="spotlight">
       <div className="spotlight__card">
-        {news.items.map((item, i) => (
+        {items.map((item, i) => (
           <div
             key={item.slug || item.title}
             className={`spotlight__slide ${i === active ? 'spotlight__slide--active' : ''}`}
@@ -94,7 +97,7 @@ function Featured() {
         </button>
 
         <div className="spotlight__dots">
-          {news.items.map((item, i) => (
+          {items.map((item, i) => (
             <button
               key={item.title}
               className={`spotlight__dot ${i === active ? 'spotlight__dot--active' : ''}`}
