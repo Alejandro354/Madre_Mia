@@ -33,11 +33,18 @@ class BlogPost(db.Model):
     quote = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.String(255), nullable=False)
     video_path = db.Column(db.String(255), nullable=True)
+    video_path_2 = db.Column(db.String(255), nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     views = db.Column(db.Integer, default=0, nullable=False)
     read_time = db.Column(db.String(20), nullable=False)
 
     def to_dict(self):
+        videos = []
+        if self.video_path:
+            videos.append({'video': f'/uploads/{self.video_path}'})
+        if self.video_path_2:
+            videos.append({'video': f'/uploads/{self.video_path_2}'})
+
         return {
             'slug': self.slug,
             'tag': self.tag,
@@ -47,6 +54,8 @@ class BlogPost(db.Model):
             'quote': self.quote,
             'image': f'/uploads/{self.image_path}',
             'video': f'/uploads/{self.video_path}' if self.video_path else None,
+            'video2': f'/uploads/{self.video_path_2}' if self.video_path_2 else None,
+            'videos': videos or None,
             'date': format_date_es(self.date),
             'views': self.views,
             'readTime': self.read_time,

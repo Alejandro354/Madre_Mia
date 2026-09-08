@@ -14,11 +14,12 @@ blog_bp = Blueprint('blog', __name__)
 
 ALLOWED_IMAGE_EXT = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
 ALLOWED_VIDEO_EXT = {'mp4', 'mov', 'webm'}
-MAX_IMAGE_MB = 8
+MAX_IMAGE_MB = 15
 MAX_VIDEO_MB = 60
 MAX_TITLE_LEN = 120
 MAX_PARAGRAPH_LEN = 800
 MAX_PARAGRAPHS = 6
+MAX_HEADING_LEN = 150
 
 ACCENTS = str.maketrans('áàäéèëíìïóòöúùüñ', 'aaaeeeiiiooouuun')
 
@@ -79,6 +80,63 @@ def save_upload(file_storage, allowed_ext, max_mb):
     return safe_name, None
 
 
+def validate_paragraphs(paragraphs):
+    if not isinstance(paragraphs, list) or not paragraphs:
+        return None, 'Agregá al menos un párrafo'
+    if len(paragraphs) > MAX_PARAGRAPHS:
+        return None, f'Máximo {MAX_PARAGRAPHS} párrafos'
+
+    cleaned = []
+    for p in paragraphs:
+        video_slot = None
+        if isinstance(p, str):
+            heading, text = '', p.strip()
+        elif isinstance(p, dict):
+            heading = str(p.get('heading') or '').strip()
+            text = str(p.get('text') or '').strip()
+            video_raw = p.get('video')
+            if video_raw not in (None, ''):
+                try:
+                    video_slot = int(video_raw)
+                except (TypeError, ValueError):
+                    return None, 'Video de párrafo inválido'
+                if video_slot not in (1, 2):
+                    return None, 'Video de párrafo inválido'
+        else:
+            return None, 'Los párrafos no pueden estar vacíos'
+
+        if not text:
+            return None, 'Los párrafos no pueden estar vacíos'
+        if len(text) > MAX_PARAGRAPH_LEN:
+            return None, f'Cada párrafo debe tener máximo {MAX_PARAGRAPH_LEN} caracteres'
+        if len(heading) > MAX_HEADING_LEN:
+            return None, f'Cada subtítulo debe tener máximo {MAX_HEADING_LEN} caracteres'
+
+        if heading or video_slot:
+            item = {'text': text}
+            if heading:
+                item['heading'] = heading
+            if video_slot:
+                item['video'] = video_slot
+            cleaned.append(item)
+        else:
+            cleaned.append(text)
+
+    return cleaned, None
+
+
+def paragraph_text(paragraph):
+    return paragraph['text'] if isinstance(paragraph, dict) else paragraph
+
+
+def make_excerpt(text, limit=220):
+    text = text.strip()
+    if len(text) <= limit:
+        return text
+    truncated = text[:limit].rsplit(' ', 1)[0].rstrip(' ,;:.-')
+    return truncated + '…'
+
+
 def delete_upload(filename):
     if not filename:
         return
@@ -126,15 +184,9 @@ def create_post():
         return jsonify({'error': f'El título no puede superar {MAX_TITLE_LEN} caracteres'}), 400
     if not tag:
         return jsonify({'error': 'La categoría es obligatoria'}), 400
-    if not isinstance(paragraphs, list) or not paragraphs:
-        return jsonify({'error': 'Agregá al menos un párrafo'}), 400
-    if len(paragraphs) > MAX_PARAGRAPHS:
-        return jsonify({'error': f'Máximo {MAX_PARAGRAPHS} párrafos'}), 400
-    for p in paragraphs:
-        if not isinstance(p, str) or not p.strip():
-            return jsonify({'error': 'Los párrafos no pueden estar vacíos'}), 400
-        if len(p) > MAX_PARAGRAPH_LEN:
-            return jsonify({'error': f'Cada párrafo debe tener máximo {MAX_PARAGRAPH_LEN} caracteres'}), 400
+    paragraphs, err = validate_paragraphs(paragraphs)
+    if err:
+        return jsonify({'error': err}), 400
 
     image = request.files.get('image')
     if not image or not image.filename:
@@ -150,16 +202,24 @@ def create_post():
         if err:
             return jsonify({'error': err}), 400
 
+    video_name_2 = None
+    video2 = request.files.get('video2')
+    if video2 and video2.filename:
+        video_name_2, err = save_upload(video2, ALLOWED_VIDEO_EXT, MAX_VIDEO_MB)
+        if err:
+            return jsonify({'error': err}), 400
+
     slug = unique_slug(slugify(title))
     post = BlogPost(
         slug=slug,
         tag=tag,
         title=title,
-        excerpt=excerpt or paragraphs[0][:180],
+        excerpt=excerpt or make_excerpt(paragraph_text(paragraphs[0])),
         content=json.dumps(paragraphs, ensure_ascii=False),
         quote=quote,
         image_path=image_name,
         video_path=video_name,
+        video_path_2=video_name_2,
         date=datetime.utcnow(),
         views=0,
         read_time=read_time,
@@ -195,17 +255,11 @@ def update_post(slug):
             paragraphs = json.loads(content_raw)
         except (ValueError, TypeError):
             return jsonify({'error': 'Formato de contenido inválido'}), 400
-        if not isinstance(paragraphs, list) or not paragraphs:
-            return jsonify({'error': 'Agregá al menos un párrafo'}), 400
-        if len(paragraphs) > MAX_PARAGRAPHS:
-            return jsonify({'error': f'Máximo {MAX_PARAGRAPHS} párrafos'}), 400
-        for p in paragraphs:
-            if not isinstance(p, str) or not p.strip():
-                return jsonify({'error': 'Los párrafos no pueden estar vacíos'}), 400
-            if len(p) > MAX_PARAGRAPH_LEN:
-                return jsonify({'error': f'Cada párrafo debe tener máximo {MAX_PARAGRAPH_LEN} caracteres'}), 400
+        paragraphs, err = validate_paragraphs(paragraphs)
+        if err:
+            return jsonify({'error': err}), 400
         post.content = json.dumps(paragraphs, ensure_ascii=False)
-        post.excerpt = excerpt or paragraphs[0][:180]
+        post.excerpt = excerpt or make_excerpt(paragraph_text(paragraphs[0]))
 
     image = request.files.get('image')
     if image and image.filename:
@@ -222,6 +276,14 @@ def update_post(slug):
             return jsonify({'error': err}), 400
         delete_upload(post.video_path)
         post.video_path = video_name
+
+    video2 = request.files.get('video2')
+    if video2 and video2.filename:
+        video_name_2, err = save_upload(video2, ALLOWED_VIDEO_EXT, MAX_VIDEO_MB)
+        if err:
+            return jsonify({'error': err}), 400
+        delete_upload(post.video_path_2)
+        post.video_path_2 = video_name_2
 
     post.title = title
     post.tag = tag
@@ -242,6 +304,7 @@ def delete_post(slug):
 
     delete_upload(post.image_path)
     delete_upload(post.video_path)
+    delete_upload(post.video_path_2)
     db.session.delete(post)
     db.session.commit()
     return jsonify({'ok': True})

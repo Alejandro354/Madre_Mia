@@ -6,6 +6,16 @@ import './CreateBlogModal.css'
 const MAX_TITLE_LEN = 120
 const MAX_PARAGRAPH_LEN = 800
 const MAX_PARAGRAPHS = 6
+const MAX_HEADING_LEN = 150
+
+function toParagraphState(content) {
+  if (!content?.length) return [{ heading: '', text: '', video: '' }]
+  return content.map((p) =>
+    typeof p === 'string'
+      ? { heading: '', text: p, video: '' }
+      : { heading: p.heading || '', text: p.text || '', video: p.video ? String(p.video) : '' }
+  )
+}
 
 function UploadIcon() {
   return (
@@ -57,21 +67,25 @@ function CreateBlogModal({ post, onClose, onSaved }) {
   const { token } = useAuth()
   const [title, setTitle] = useState(post?.title || '')
   const [tag, setTag] = useState(post?.tag || '')
-  const [paragraphs, setParagraphs] = useState(post?.content?.length ? post.content : [''])
+  const [paragraphs, setParagraphs] = useState(toParagraphState(post?.content))
   const [quote, setQuote] = useState(post?.quote || '')
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(post?.image || '')
   const [video, setVideo] = useState(null)
   const [videoPreview, setVideoPreview] = useState(post?.video || '')
+  const [video2, setVideo2] = useState(null)
+  const [video2Preview, setVideo2Preview] = useState(post?.video2 || '')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const updateParagraph = (index, value) => {
-    setParagraphs((prev) => prev.map((p, i) => (i === index ? value : p)))
+  const updateParagraph = (index, field, value) => {
+    setParagraphs((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)))
   }
 
   const addParagraph = () => {
-    setParagraphs((prev) => (prev.length >= MAX_PARAGRAPHS ? prev : [...prev, '']))
+    setParagraphs((prev) =>
+      prev.length >= MAX_PARAGRAPHS ? prev : [...prev, { heading: '', text: '', video: '' }]
+    )
   }
 
   const removeParagraph = (index) => {
@@ -92,15 +106,23 @@ function CreateBlogModal({ post, onClose, onSaved }) {
     setVideoPreview(URL.createObjectURL(file))
   }
 
+  const handleVideo2Change = (event) => {
+    const file = event.target.files?.[0] || null
+    if (!file) return
+    setVideo2(file)
+    setVideo2Preview(URL.createObjectURL(file))
+  }
+
   const validate = () => {
     if (!title.trim()) return 'El título es obligatorio.'
     if (title.length > MAX_TITLE_LEN) return `El título no puede superar ${MAX_TITLE_LEN} caracteres.`
     if (!tag.trim()) return 'La categoría es obligatoria.'
-    const cleanParagraphs = paragraphs.map((p) => p.trim()).filter(Boolean)
+    const cleanParagraphs = paragraphs.map((p) => p.text.trim()).filter(Boolean)
     if (cleanParagraphs.length === 0) return 'Agregá al menos un párrafo.'
     if (cleanParagraphs.length > MAX_PARAGRAPHS) return `Máximo ${MAX_PARAGRAPHS} párrafos.`
     for (const p of paragraphs) {
-      if (p.length > MAX_PARAGRAPH_LEN) return `Cada párrafo debe tener máximo ${MAX_PARAGRAPH_LEN} caracteres.`
+      if (p.text.length > MAX_PARAGRAPH_LEN) return `Cada párrafo debe tener máximo ${MAX_PARAGRAPH_LEN} caracteres.`
+      if (p.heading.length > MAX_HEADING_LEN) return `Cada subtítulo debe tener máximo ${MAX_HEADING_LEN} caracteres.`
     }
     if (!isEditing && !image) return 'La imagen es obligatoria.'
     return ''
@@ -120,10 +142,22 @@ function CreateBlogModal({ post, onClose, onSaved }) {
     const formData = new FormData()
     formData.append('title', title.trim())
     formData.append('tag', tag.trim())
-    formData.append('content', JSON.stringify(paragraphs.map((p) => p.trim()).filter(Boolean)))
+    const contentPayload = paragraphs
+      .filter((p) => p.text.trim())
+      .map((p) => {
+        const heading = p.heading.trim()
+        const videoSlot = p.video ? Number(p.video) : null
+        if (!heading && !videoSlot) return p.text.trim()
+        const item = { text: p.text.trim() }
+        if (heading) item.heading = heading
+        if (videoSlot) item.video = videoSlot
+        return item
+      })
+    formData.append('content', JSON.stringify(contentPayload))
     formData.append('quote', quote.trim())
     if (image) formData.append('image', image)
     if (video) formData.append('video', video)
+    if (video2) formData.append('video2', video2)
 
     try {
       const res = await fetch(isEditing ? `/api/blog/${post.slug}` : '/api/blog', {
@@ -197,7 +231,7 @@ function CreateBlogModal({ post, onClose, onSaved }) {
               }}
             />
             <FileDropField
-              label="Video (opcional)"
+              label="Video 1 (opcional)"
               hint="Subir video"
               accept="video/*"
               preview={videoPreview}
@@ -206,6 +240,18 @@ function CreateBlogModal({ post, onClose, onSaved }) {
               onClear={() => {
                 setVideo(null)
                 setVideoPreview('')
+              }}
+            />
+            <FileDropField
+              label="Video 2 (opcional)"
+              hint="Subir video"
+              accept="video/*"
+              preview={video2Preview}
+              isVideo
+              onChange={handleVideo2Change}
+              onClear={() => {
+                setVideo2(null)
+                setVideo2Preview('')
               }}
             />
           </div>
@@ -218,15 +264,32 @@ function CreateBlogModal({ post, onClose, onSaved }) {
 
             {paragraphs.map((paragraph, index) => (
               <div key={index} className="create-blog__paragraph">
+                <input
+                  type="text"
+                  className="create-blog__paragraph-heading"
+                  value={paragraph.heading}
+                  onChange={(event) => updateParagraph(index, 'heading', event.target.value)}
+                  maxLength={MAX_HEADING_LEN}
+                  placeholder="Subtítulo en gris (opcional)"
+                />
                 <textarea
-                  value={paragraph}
-                  onChange={(event) => updateParagraph(index, event.target.value)}
+                  value={paragraph.text}
+                  onChange={(event) => updateParagraph(index, 'text', event.target.value)}
                   maxLength={MAX_PARAGRAPH_LEN}
                   rows={3}
                   placeholder={`Párrafo ${index + 1}`}
                 />
+                <select
+                  className="create-blog__paragraph-video"
+                  value={paragraph.video}
+                  onChange={(event) => updateParagraph(index, 'video', event.target.value)}
+                >
+                  <option value="">Sin video después de este párrafo</option>
+                  <option value="1">Video 1 después de este párrafo</option>
+                  <option value="2">Video 2 después de este párrafo</option>
+                </select>
                 <div className="create-blog__paragraph-footer">
-                  <span className="create-blog__counter">{paragraph.length}/{MAX_PARAGRAPH_LEN}</span>
+                  <span className="create-blog__counter">{paragraph.text.length}/{MAX_PARAGRAPH_LEN}</span>
                   {paragraphs.length > 1 && (
                     <button type="button" className="create-blog__remove" onClick={() => removeParagraph(index)}>
                       Quitar

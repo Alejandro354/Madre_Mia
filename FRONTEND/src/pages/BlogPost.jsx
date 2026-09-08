@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
-import CreateBlogModal from '../components/admin/CreateBlogModal.jsx'
-import ConfirmDialog from '../components/ui/ConfirmDialog.jsx'
 import { useContent } from '../data/useContent.js'
-import { useAuth } from '../context/AuthContext.jsx'
-import { notifyBlogPostCreated } from '../hooks/useBlogPosts.js'
 import './BlogPost.css'
 
 function VideoBlock({ item, ui }) {
@@ -70,38 +66,11 @@ function VideoBlock({ item, ui }) {
 
 function BlogPost({ slug }) {
   const { news, ui } = useContent()
-  const { isAuthenticated, token } = useAuth()
   const [dynamicPost, setDynamicPost] = useState(null)
   const [dynamicLoading, setDynamicLoading] = useState(false)
-  const [editOpen, setEditOpen] = useState(false)
-  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [deleteError, setDeleteError] = useState('')
 
   const staticPost = news.items.find((item) => item.slug === slug)
   const post = staticPost || dynamicPost
-  const canManage = isAuthenticated && post?.source === 'dynamic'
-
-  const handleDelete = async () => {
-    setDeleteError('')
-    setDeleting(true)
-    try {
-      const res = await fetch(`/api/blog/${post.slug}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || 'No se pudo eliminar')
-      }
-      notifyBlogPostCreated()
-      window.location.hash = '#/blog'
-    } catch (err) {
-      setDeleteError(err.message)
-    } finally {
-      setDeleting(false)
-    }
-  }
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -138,6 +107,15 @@ function BlogPost({ slug }) {
     )
   }
 
+  const usedVideoSlots = new Set(
+    (post.content || [])
+      .filter((p) => p && typeof p === 'object' && (p.video === 1 || p.video === 2))
+      .map((p) => p.video)
+  )
+  const consumedVideoUrls = new Set()
+  if (usedVideoSlots.has(1) && post.video) consumedVideoUrls.add(post.video)
+  if (usedVideoSlots.has(2) && post.video2) consumedVideoUrls.add(post.video2)
+
   return (
     <>
       <Navbar />
@@ -145,17 +123,6 @@ function BlogPost({ slug }) {
         <article className="container blog-post__article">
           <div className="blog-post__top-row">
             <a href="#/blog" className="blog-post__back">← {ui.backToBlog}</a>
-
-            {canManage && (
-              <div className="blog-post__admin-actions">
-                <button type="button" onClick={() => setEditOpen(true)}>
-                  Editar
-                </button>
-                <button type="button" onClick={() => setConfirmDeleteOpen(true)}>
-                  Eliminar
-                </button>
-              </div>
-            )}
           </div>
 
           <span className="blog-post__tag">{post.tag}</span>
@@ -175,9 +142,21 @@ function BlogPost({ slug }) {
           )}
 
           <div className="blog-post__body">
-            {post.content.map((paragraph, i) => (
-              <p key={i}>{paragraph}</p>
-            ))}
+            {post.content.map((paragraph, i) => {
+              if (typeof paragraph === 'string') {
+                return <p key={i}>{paragraph}</p>
+              }
+              const videoSrc = paragraph.video === 1 ? post.video : paragraph.video === 2 ? post.video2 : null
+              return (
+                <div key={i} className="blog-post__paragraph">
+                  {paragraph.heading && (
+                    <span className="blog-post__paragraph-heading">{paragraph.heading}</span>
+                  )}
+                  <p>{paragraph.text}</p>
+                  {videoSrc && <VideoBlock item={{ video: videoSrc, preview: post.image }} ui={ui} />}
+                </div>
+              )
+            })}
           </div>
 
           {post.quote && (
@@ -204,43 +183,18 @@ function BlogPost({ slug }) {
             </div>
           )}
 
-          {post.videos?.map((item, i) => (
-            <VideoBlock key={i} item={item} ui={ui} />
-          ))}
+          {post.videos
+            ?.filter((item) => !consumedVideoUrls.has(item.video))
+            .map((item, i) => (
+              <VideoBlock key={i} item={item} ui={ui} />
+            ))}
 
-          {post.video && !post.videos?.length && (
+          {post.video && !post.videos?.length && !consumedVideoUrls.has(post.video) && (
             <VideoBlock item={{ video: post.video, preview: post.image }} ui={ui} />
           )}
         </article>
       </main>
       <Footer />
-
-      {editOpen && canManage && (
-        <CreateBlogModal
-          post={post}
-          onClose={() => setEditOpen(false)}
-          onSaved={(data) => {
-            setDynamicPost(data)
-            notifyBlogPostCreated()
-          }}
-        />
-      )}
-
-      {confirmDeleteOpen && (
-        <ConfirmDialog
-          title="Eliminar historia"
-          message="¿Seguro que querés eliminar esta historia? Esta acción no se puede deshacer."
-          error={deleteError}
-          confirmLabel="Eliminar"
-          danger
-          loading={deleting}
-          onCancel={() => {
-            setConfirmDeleteOpen(false)
-            setDeleteError('')
-          }}
-          onConfirm={handleDelete}
-        />
-      )}
     </>
   )
 }
