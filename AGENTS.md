@@ -39,6 +39,8 @@ Student recruitment platform ("PractiCompu"). Two apps: Flask backend + Vite/Rea
 ## Design state
 The Figma-based redesign was reverted; the frontend is a basic custom CSS design. Profile page has two underline tabs ("Perfil" / "Portafolio"); user menu (photo + name + dropdown) lives in `src/components/UserMenu.jsx` rendered by `ProtectedRoute`. "Inicio"/Dashboard page was removed — post-login route is `/vacantes`.
 
+**Sistema de diseño compartido con el módulo de empresa.** `src/index.css` alinea los tokens con `practicaya/empresa/frontend/src/index.css`: mismos valores, pero conservando los nombres de aquí (`--primary`, `--surface`, `--border`…) porque todo `App.css` los usa — cada token lleva al lado, en comentario, su nombre en el módulo de empresa. De ahí vienen la tipografía **Nunito**, los botones píldora (`border-radius: 50px` + `transform: scale(1.02)` en hover), el anillo de foco `--focus-ring`, el hover elevado de tarjetas (`translateY(-4px)` + `--card-shadow-hover`) y el halo rojo del enlace activo de la barra lateral. **Los iconos NO se comparten**: el módulo de empresa usa `lucide-react`, aquí son SVG propios en `components/icons.jsx` — decisión deliberada para no añadir dependencias.
+
 Both profile tabs share a two-column shell: `.split-view` / `.split-view-aside` (sticky) / `.split-view-main` inside a `page--wide`, collapsing to one column at 768px. Shared card styling is the `.pv-*` prefix in `App.css`.
 
 - **Perfil (lectura)** — `src/components/ProfileView.jsx`: left aside with avatar + camera badge, name, role, location/email, and a read-only "Redes sociales" card (fetches `getSocials` itself); right column with a dark "Editar perfil" pill and the Datos personales / Datos académicos / Descripción profesional cards.

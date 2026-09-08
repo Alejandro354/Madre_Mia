@@ -59,13 +59,15 @@ export default function Sidebar() {
             key={to}
             to={to}
             className={({ isActive }) => `sidebar-link${isActive ? ' sidebar-link--active' : ''}`}
-            // Colapsada solo se ve el icono: el title da el nombre al pasar el mouse.
-            title={collapsed ? label : undefined}
+            aria-label={collapsed ? label : undefined}
           >
             <span className="sidebar-link-icon">
               <Icon />
             </span>
             <span className="sidebar-link-label">{label}</span>
+            <span className="sidebar-tooltip" role="tooltip">
+              {label === 'Mis postulaciones' ? 'Postulaciones' : label}
+            </span>
           </NavLink>
         ))}
       </nav>
@@ -75,12 +77,15 @@ export default function Sidebar() {
         className="sidebar-toggle"
         onClick={toggle}
         aria-expanded={!collapsed}
-        title={collapsed ? 'Expandir menú' : 'Contraer menú'}
+        aria-label={collapsed ? 'Expandir menú' : 'Contraer menú'}
       >
         <span className="sidebar-link-icon">
           {collapsed ? <ChevronsRightIcon /> : <ChevronsLeftIcon />}
         </span>
         <span className="sidebar-link-label">Contraer</span>
+        <span className="sidebar-tooltip" role="tooltip">
+          {collapsed ? 'Expandir menú' : 'Contraer menú'}
+        </span>
       </button>
     </aside>
   )

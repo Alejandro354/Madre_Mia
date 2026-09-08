@@ -49,7 +49,7 @@ export function VacanciesSkeleton() {
   return (
     <>
       <Topbar title="Vacantes" subtitle="Encuentra oportunidades que impulsen tu futuro." />
-      <div className="page page--wide">
+      <div className="page page--wide" >
         <div className="vac-grid">
           <VacancyCardSkeleton />
           <VacancyCardSkeleton />

@@ -6,8 +6,8 @@
 
 .app-content {
   flex: 1;
-  padding: 32px;
-  background-color: var(--surface);
+  
+  background-color: #fff;
 }
 
 .page {
@@ -33,7 +33,7 @@
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: color 0.15s ease;
@@ -188,6 +188,11 @@
 
 /* ---------- Sidebar ---------- */
 .sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: visible;
+  align-self: flex-start;
   width: 218px;
   flex-shrink: 0;
   background-color: var(--sidebar);
@@ -241,6 +246,7 @@
 }
 
 .sidebar-link {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 11px;
@@ -272,9 +278,12 @@
   background-color: var(--primary);
   color: #ffffff;
   font-weight: 600;
+  /* Halo rojo del enlace activo, tomado del módulo de empresa. */
+  box-shadow: 0 4px 12px rgba(255, 24, 55, 0.3);
 }
 
 .sidebar-toggle {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 11px;
@@ -294,6 +303,34 @@
 .sidebar-toggle:hover {
   background-color: rgba(255, 255, 255, 0.07);
   color: #ffffff;
+}
+
+.sidebar-tooltip {
+  position: absolute;
+  left: calc(100% + 7px);
+  top: 50%;
+  z-index: 10;
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: rgba(37, 40, 48, 0.94);
+  color: #e7e8ec;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(2px, -50%);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.sidebar--collapsed .sidebar-link:hover .sidebar-tooltip,
+.sidebar--collapsed .sidebar-link:focus-visible .sidebar-tooltip,
+.sidebar--collapsed .sidebar-toggle:hover .sidebar-tooltip,
+.sidebar--collapsed .sidebar-toggle:focus-visible .sidebar-tooltip {
+  opacity: 1;
+  transform: translate(0, -50%);
 }
 
 /* ---------- Sidebar contraída ---------- */
@@ -332,8 +369,10 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 14px 24px;
-  padding: 18px 32px 6px;
-  background-color: var(--surface);
+  padding: 16px 24px 16px;
+  background-color: #ffffffff;
+  border-bottom: 1px solid var(--border);
+  border-radius: 16px;
 }
 
 .topbar-heading {
@@ -343,7 +382,7 @@
 
 .topbar-title {
   margin: 0;
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.25;
@@ -444,12 +483,13 @@
 
 .search-field-input {
   width: 100%;
-  padding: 9px 14px 9px 36px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background-color: var(--background);
+  padding: 10px 14px 10px 36px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: var(--surface-input);
   font-size: 14px;
   color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search-field-input:focus {
@@ -605,17 +645,19 @@
 
 .field-input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
   font-size: 14px;
   color: var(--text-primary);
   background: var(--background);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .field-input:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: var(--focus-ring);
 }
 
 .field-input--error {
@@ -660,13 +702,18 @@ textarea.field-input {
   color: var(--primary);
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons ----------
+   Píldora + hover con escala, igual que el módulo de empresa. */
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: 50px;
   border: none;
   font-size: 14px;
   font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .btn--primary {
@@ -675,19 +722,27 @@ textarea.field-input {
 }
 
 .btn--primary:hover {
-  opacity: 0.9;
+  background-color: var(--primary-hover);
+  transform: scale(1.02);
 }
 
 .btn--secondary {
-  background-color: var(--surface);
-  color: var(--text-primary);
+  background-color: var(--background);
+  color: var(--text-secondary);
   border: 1px solid var(--border);
+}
+
+.btn--secondary:hover {
+  border-color: var(--disabled-text);
+  color: var(--text-primary);
 }
 
 .btn:disabled {
   background-color: var(--disabled);
   color: var(--disabled-text);
   cursor: not-allowed;
+  transform: none;
+  pointer-events: none;
 }
 
 /* ---------- Alerts ---------- */
@@ -1025,16 +1080,17 @@ textarea.field-input {
   gap: 8px;
   padding: 11px 20px;
   border: none;
-  border-radius: 10px;
+  border-radius: 50px;
   background-color: var(--sidebar);
   color: #ffffff;
   font-size: 14px;
   font-weight: 600;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .pv-edit-btn:hover {
   background-color: var(--primary);
+  transform: scale(1.02);
 }
 
 .pv-edit-btn svg {
@@ -1250,7 +1306,7 @@ textarea.field-input {
 .pf-action {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: 50%;
   border: 1px solid var(--border);
   background-color: var(--background);
   color: var(--text-secondary);
@@ -1314,8 +1370,7 @@ textarea.field-input {
 /* ---------- Panel blanco contenedor (Vacantes, Mis postulaciones) ---------- */
 .panel {
   background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  
   padding: 20px;
   min-height: 420px;
 }
@@ -1345,12 +1400,13 @@ textarea.field-input {
   appearance: none;
   padding: 9px 32px 9px 14px;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 8px;
   background-color: var(--background);
   color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
   /* Chevron dibujado en el fondo: evita un icono extra por selector. */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -1358,9 +1414,32 @@ textarea.field-input {
   background-size: 15px;
 }
 
+.vac-select:hover {
+  border-color: #c8ccdc;
+  background-color: #fcfcfe;
+}
+
 .vac-select:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 24, 55, 0.12);
+}
+
+.vac-select:open {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 24, 55, 0.12);
+}
+
+.vac-select option {
+  padding: 10px;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.vac-select option:checked {
+  background-color: var(--primary-light);
+  color: var(--primary);
 }
 
 .vac-select--sort {
@@ -1369,7 +1448,8 @@ textarea.field-input {
 
 .vac-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(258px, 1fr));
+  /* Evita que auto-fill cambie de columnas a mitad de la animación del sidebar. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -1378,14 +1458,16 @@ textarea.field-input {
   flex-direction: column;
   background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 18px;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+/* Se eleva al pasar el mouse, como las tarjetas del módulo de empresa. */
 .vac-card:hover {
-  border-color: #d9dced;
-  box-shadow: 0 6px 20px rgba(51, 51, 51, 0.08);
+  transform: translateY(-4px);
+  border-color: #D1D4E3;
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* El cuerpo es un botón para abrir el detalle sin anidar el bookmark
@@ -1491,7 +1573,7 @@ textarea.field-input {
   height: 38px;
   flex-shrink: 0;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 50%;
   background: var(--background);
   color: var(--text-secondary);
   display: flex;
@@ -1524,15 +1606,16 @@ textarea.field-input {
   gap: 6px;
   padding: 10px 16px;
   border: none;
-  border-radius: 9px;
+  border-radius: 50px;
   background-color: var(--primary);
   color: #ffffff;
   font-size: 14px;
   font-weight: 600;
+  transition: background-color 0.2s ease;
 }
 
 .vac-card-apply:hover {
-  opacity: 0.9;
+  background-color: var(--primary-hover);
 }
 
 .vac-card-apply--done,
@@ -1561,6 +1644,9 @@ textarea.field-input {
   margin-bottom: 18px;
   font-size: 14px;
   color: var(--text-secondary);
+  padding-top: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .vd-back {
@@ -1863,14 +1949,15 @@ textarea.field-input {
   gap: 14px;
   background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 13px;
+  border-radius: 12px;
   padding: 14px 16px;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .app-row:hover {
-  border-color: #d9dced;
-  box-shadow: 0 4px 16px rgba(51, 51, 51, 0.06);
+  transform: translateY(-2px);
+  border-color: #D1D4E3;
+  box-shadow: var(--card-shadow-hover);
 }
 
 .app-row-logo {
@@ -2193,6 +2280,12 @@ textarea.field-input {
   }
 }
 
+@media (max-width: 1199px) {
+  .vac-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 190px;
@@ -2225,6 +2318,9 @@ textarea.field-input {
   }
 
   .sidebar {
+    position: static;
+    height: auto;
+    overflow-y: visible;
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;

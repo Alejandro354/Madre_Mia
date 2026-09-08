@@ -131,7 +131,7 @@ export default function Profile() {
   return (
     <>
       <Topbar title="Mi Perfil" subtitle="Tu información y tu portafolio." />
-      <div className="page page--wide">
+      <div className="page page--wide" style={{marginLeft: '10px', marginRight: '10px'}}>
         <div className="tabs">
         <button
           type="button"

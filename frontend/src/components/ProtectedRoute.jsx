@@ -19,7 +19,7 @@ export default function ProtectedRoute({ children }) {
     <div className="app-layout">
       <Sidebar />
       <div className="app-main">
-        <main className="app-content">{children}</main>
+        <main className="app-content" style={{marginBottom: '10px'}}>{children}</main>
       </div>
     </div>
   )
