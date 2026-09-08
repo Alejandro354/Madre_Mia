@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+
+/*
+ * Tokens alineados con el módulo de empresa (practicaya/empresa) para que los
+ * dos módulos se vean del mismo producto. Se conservan los NOMBRES de aquí
+ * (todo App.css los usa) con los VALORES de allá; al lado va el nombre que usa
+ * el módulo de empresa, para poder rastrear la equivalencia.
+ */
+:root {
+  --primary: #FF1837;          /* --color-primary */
+  --primary-hover: #E01530;    /* --color-primary-hover */
+  --sidebar: #222222;          /* --color-sidebar */
+  --background: #FFFFFF;       /* --bg-main */
+  --surface: #F8F9FB;          /* --bg-secondary */
+  --surface-input: #F4F5FA;    /* --bg-search */
+  --primary-light: #FDECEF;    /* --bg-tag */
+  --text-primary: #1A1A1A;     /* --text-primary */
+  --text-secondary: #666666;   /* --text-secondary */
+  --border: #E9EBF4;           /* --border-color */
+  --disabled: #F4F5FA;         /* --btn-disabled-bg */
+  --disabled-text: #9A9FB5;    /* --text-disabled */
+
+  --font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* Anillo de foco y sombra de tarjeta, reutilizados en todo App.css. */
+  --focus-ring: 0 0 0 4px rgba(255, 24, 55, 0.1);
+  --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: var(--background);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
