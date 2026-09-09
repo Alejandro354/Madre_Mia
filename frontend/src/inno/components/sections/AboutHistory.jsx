@@ -22,8 +22,17 @@ function AboutHistory() {
         </div>
 
         <div className="history__media">
-          <Illustration caption={history.mediaCaptions[0]} className="history__media-main" />
-          <Illustration caption={history.mediaCaptions[1]} variant="dark" className="history__media-secondary" />
+          <Illustration
+            className="history__media-main"
+            image={history.mainImage}
+            imageAlt={history.title}
+          />
+          <Illustration
+            variant="dark"
+            className="history__media-secondary"
+            image={history.secondaryImage}
+            imageAlt={history.title}
+          />
         </div>
       </div>
     </section>

@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
+from sqlalchemy import inspect, text
 
 from auth import auth_bp
 from blog import blog_bp
@@ -25,6 +26,15 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        inspector = inspect(db.engine)
+        if 'blog_posts' in inspector.get_table_names():
+            columns = {col['name'] for col in inspector.get_columns('blog_posts')}
+            if 'image_placement' not in columns:
+                with db.engine.connect() as conn:
+                    conn.execute(text(
+                        "ALTER TABLE blog_posts ADD COLUMN image_placement VARCHAR(10) DEFAULT 'top' NOT NULL"
+                    ))
+                    conn.commit()
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(blog_bp)

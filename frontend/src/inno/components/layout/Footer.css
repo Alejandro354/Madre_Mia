@@ -1,14 +1,13 @@
 .footer {
   background: var(--color-dark);
   color: var(--color-text-on-dark-muted);
-  padding-top: var(--space-lg);
+  padding-top: var(--space-md);
 }
 
 .footer__grid {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-lg) var(--space-2xl);
-  padding-bottom: var(--space-xl);
 }
 
 .footer__brand {
@@ -56,8 +55,9 @@
 }
 
 .footer__bottom {
+  margin-top: var(--space-lg);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1.5rem 0;
+  padding: 1.25rem 0;
 }
 
 .footer__bottom-inner {
@@ -69,6 +69,8 @@
 }
 
 .footer__admin-link {
+  display: block;
+  margin-top: 1rem;
   color: var(--color-text-on-dark-muted);
   font-size: 0.9rem;
   opacity: 0.7;
