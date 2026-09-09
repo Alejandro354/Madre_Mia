@@ -32,6 +32,7 @@ class BlogPost(db.Model):
     content = db.Column(db.Text, nullable=False)  # JSON: lista de párrafos
     quote = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.String(255), nullable=False)
+    image_placement = db.Column(db.String(10), default='top', nullable=False)
     video_path = db.Column(db.String(255), nullable=True)
     video_path_2 = db.Column(db.String(255), nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -53,6 +54,7 @@ class BlogPost(db.Model):
             'content': json.loads(self.content),
             'quote': self.quote,
             'image': f'/uploads/{self.image_path}',
+            'imagePlacement': self.image_placement,
             'video': f'/uploads/{self.video_path}' if self.video_path else None,
             'video2': f'/uploads/{self.video_path_2}' if self.video_path_2 else None,
             'videos': videos or None,

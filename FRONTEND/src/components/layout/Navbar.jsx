@@ -32,7 +32,7 @@ function Navbar() {
           <img src={fundacionLogo} alt="Fundación Juan del Corral" className="navbar__fundacion-logo" />
         </a>
 
-        <nav className={`navbar__links ${open ? 'navbar__links--open' : ''}`}>
+        <nav className={`navbar__links ${open ? 'navbar__links--open' : 'na'}`}>
           {links.map((link) => (
             <a
               key={link.label}

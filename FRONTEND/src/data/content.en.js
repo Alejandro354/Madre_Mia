@@ -7,6 +7,8 @@ import practicantes2 from '../assets/practicantes2.jpg'
 import equipoCadena from '../assets/Imagen1.jpg'
 import voluntariados from '../assets/voluntariados.jpg'
 import reunionCadena from '../assets/ReunionCadena.jpg'
+import centroExcelencia from '../assets/Centro-de-Excelencia.jpg'
+import cadenaTrabajadores from '../assets/CadenaTrabajadores.jpg'
 import historyVideo from '../assets/VideoJeronimo1.mp4'
 import marlonVideo from '../assets/VideoMarlon.mp4'
 
@@ -27,6 +29,9 @@ export const ui = {
   removeSaved: 'Remove from saved',
   logout: 'Log out',
   createBlog: 'Create post',
+  searchPlaceholder: 'Search stories…',
+  allCategories: 'All',
+  noResults: "We couldn't find stories matching those filters.",
 }
 
 export const nav = {
@@ -64,7 +69,8 @@ export const history = {
     'We manage digital advertising with a focus on measurable results.',
     'We support social growth with data, not guesswork.',
   ],
-  mediaCaptions: ['Team strategy session', 'Content production'],
+  mainImage: centroExcelencia,
+  secondaryImage: cadenaTrabajadores,
 }
 
 export const videoShowcase = {
@@ -135,15 +141,15 @@ export const news = {
 }
 
 export const footer = {
-  description: 'Strategy, content and growth for brands that want to be seen.',
+  description: 'Strategy, content and social innovation that connect people and communities.',
   address: 'Medellín, Colombia',
   rights: 'All rights reserved.',
   columns: [
     {
       title: 'Explore',
       links: [
+        { label: 'Home', href: '#inicio' },
         { label: 'About Us', href: '#/nosotros' },
-        { label: 'Services', href: '#servicios' },
         { label: 'Stories', href: '#/historia' },
         { label: 'Blog', href: '#/blog' },
       ],

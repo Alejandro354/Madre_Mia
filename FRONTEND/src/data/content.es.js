@@ -7,6 +7,8 @@ import practicantes2 from '../assets/practicantes2.jpg'
 import equipoCadena from '../assets/Imagen1.jpg'
 import voluntariados from '../assets/voluntariados.jpg'
 import reunionCadena from '../assets/ReunionCadena.jpg'
+import centroExcelencia from '../assets/Centro-de-Excelencia.jpg'
+import cadenaTrabajadores from '../assets/CadenaTrabajadores.jpg'
 import historyVideo from '../assets/VideoJeronimo1.mp4'
 import marlonVideo from '../assets/VideoMarlon.mp4'
 
@@ -27,6 +29,9 @@ export const ui = {
   removeSaved: 'Quitar de guardados',
   logout: 'Cerrar sesión',
   createBlog: 'Crear blog',
+  searchPlaceholder: 'Buscar historias…',
+  allCategories: 'Todas',
+  noResults: 'No encontramos historias con esos filtros.',
 }
 
 export const nav = {
@@ -64,7 +69,8 @@ export const history = {
     'Gestionamos pauta digital con foco en resultados medibles.',
     'Acompañamos el crecimiento en redes con datos, no intuición.',
   ],
-  mediaCaptions: ['Equipo en sesión de estrategia', 'Producción de contenido'],
+  mainImage: centroExcelencia,
+  secondaryImage: cadenaTrabajadores,
 }
 
 export const videoShowcase = {
@@ -73,7 +79,7 @@ export const videoShowcase = {
   items: [
     {
       title: 'Jerónimo Ávila Sanguino nos cuenta',
-      subtitle: 'Cómo vive la innovación social en Cadena',
+      subtitle: 'Su historia en el Centro de Excelencia de Cadena',
       video: historyVideo,
     },
     {
@@ -135,15 +141,15 @@ export const news = {
 }
 
 export const footer = {
-  description: 'Estrategia, contenido y crecimiento para marcas que quieren ser vistas.',
+  description: 'Estrategia, contenido e innovación social que conectan personas y comunidades.',
   address: 'Medellín, Colombia',
   rights: 'Todos los derechos reservados.',
   columns: [
     {
       title: 'Explorar',
       links: [
+        { label: 'Inicio', href: '#inicio' },
         { label: 'Nosotros', href: '#/nosotros' },
-        { label: 'Servicios', href: '#servicios' },
         { label: 'Historias', href: '#/historia' },
         { label: 'Blog', href: '#/blog' },
       ],

@@ -89,6 +89,8 @@ def validate_paragraphs(paragraphs):
     cleaned = []
     for p in paragraphs:
         video_slot = None
+        image = None
+        image_position = None
         if isinstance(p, str):
             heading, text = '', p.strip()
         elif isinstance(p, dict):
@@ -102,6 +104,12 @@ def validate_paragraphs(paragraphs):
                     return None, 'Video de párrafo inválido'
                 if video_slot not in (1, 2):
                     return None, 'Video de párrafo inválido'
+            image_raw = p.get('image')
+            if isinstance(image_raw, str) and image_raw.startswith('/uploads/'):
+                image = image_raw
+            position_raw = p.get('imagePosition')
+            if position_raw in ('above', 'below'):
+                image_position = position_raw
         else:
             return None, 'Los párrafos no pueden estar vacíos'
 
@@ -112,17 +120,51 @@ def validate_paragraphs(paragraphs):
         if len(heading) > MAX_HEADING_LEN:
             return None, f'Cada subtítulo debe tener máximo {MAX_HEADING_LEN} caracteres'
 
-        if heading or video_slot:
+        if heading or video_slot or image or image_position:
             item = {'text': text}
             if heading:
                 item['heading'] = heading
             if video_slot:
                 item['video'] = video_slot
+            if image:
+                item['image'] = image
+            if image_position:
+                item['imagePosition'] = image_position
             cleaned.append(item)
         else:
             cleaned.append(text)
 
     return cleaned, None
+
+
+def paragraph_image_path(paragraph):
+    if isinstance(paragraph, dict) and isinstance(paragraph.get('image'), str):
+        return paragraph['image'].rsplit('/', 1)[-1]
+    return None
+
+
+def apply_paragraph_images(paragraphs, old_paragraphs=None):
+    old_images = set()
+    if old_paragraphs:
+        old_images = {p for p in (paragraph_image_path(item) for item in old_paragraphs) if p}
+
+    for i, paragraph in enumerate(paragraphs):
+        file_field = request.files.get(f'paragraph_image_{i}')
+        if file_field and file_field.filename:
+            image_name, err = save_upload(file_field, ALLOWED_IMAGE_EXT, MAX_IMAGE_MB)
+            if err:
+                return None, err
+            if isinstance(paragraph, str):
+                paragraph = {'text': paragraph}
+                paragraphs[i] = paragraph
+            paragraph['image'] = f'/uploads/{image_name}'
+            paragraph.setdefault('imagePosition', 'below')
+
+    new_images = {p for p in (paragraph_image_path(item) for item in paragraphs) if p}
+    for stale in old_images - new_images:
+        delete_upload(stale)
+
+    return paragraphs, None
 
 
 def paragraph_text(paragraph):
@@ -172,6 +214,8 @@ def create_post():
     excerpt = (request.form.get('excerpt') or '').strip()
     quote = (request.form.get('quote') or '').strip() or None
     read_time = (request.form.get('readTime') or '3 min').strip()
+    image_placement = request.form.get('imagePlacement')
+    image_placement = image_placement if image_placement in ('top', 'bottom') else 'top'
 
     try:
         paragraphs = json.loads(request.form.get('content') or '[]')
@@ -185,6 +229,9 @@ def create_post():
     if not tag:
         return jsonify({'error': 'La categoría es obligatoria'}), 400
     paragraphs, err = validate_paragraphs(paragraphs)
+    if err:
+        return jsonify({'error': err}), 400
+    paragraphs, err = apply_paragraph_images(paragraphs)
     if err:
         return jsonify({'error': err}), 400
 
@@ -218,6 +265,7 @@ def create_post():
         content=json.dumps(paragraphs, ensure_ascii=False),
         quote=quote,
         image_path=image_name,
+        image_placement=image_placement,
         video_path=video_name,
         video_path_2=video_name_2,
         date=datetime.utcnow(),
@@ -258,6 +306,10 @@ def update_post(slug):
         paragraphs, err = validate_paragraphs(paragraphs)
         if err:
             return jsonify({'error': err}), 400
+        old_paragraphs = json.loads(post.content)
+        paragraphs, err = apply_paragraph_images(paragraphs, old_paragraphs)
+        if err:
+            return jsonify({'error': err}), 400
         post.content = json.dumps(paragraphs, ensure_ascii=False)
         post.excerpt = excerpt or make_excerpt(paragraph_text(paragraphs[0]))
 
@@ -268,6 +320,10 @@ def update_post(slug):
             return jsonify({'error': err}), 400
         delete_upload(post.image_path)
         post.image_path = image_name
+
+    image_placement = request.form.get('imagePlacement')
+    if image_placement in ('top', 'bottom'):
+        post.image_placement = image_placement
 
     video = request.files.get('video')
     if video and video.filename:
@@ -305,6 +361,10 @@ def delete_post(slug):
     delete_upload(post.image_path)
     delete_upload(post.video_path)
     delete_upload(post.video_path_2)
+    for paragraph in json.loads(post.content):
+        image_name = paragraph_image_path(paragraph)
+        if image_name:
+            delete_upload(image_name)
     db.session.delete(post)
     db.session.commit()
     return jsonify({'ok': True})

@@ -83,6 +83,25 @@
   margin-bottom: 0.3rem;
 }
 
+.blog-post__hero-bottom {
+  margin-top: var(--space-lg);
+}
+
+.blog-post__hero-bottom .blog-post__hero {
+  margin-bottom: 0;
+}
+
+.blog-post__paragraph-image {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin: 0.6rem auto;
+}
+
 .blog-post__body--video,
 .blog-post__body--secondary {
   margin-top: var(--space-lg);

@@ -15,15 +15,8 @@ function Footer() {
     <footer className="footer">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <Logo variant="dark" />
+          <Logo variant="footer" />
           <p className="footer__description">{footer.description}</p>
-          <div className="footer__social">
-            {fundacionSocial.networks.map((network) => (
-              <a key={network.label} href={network.href} target="_blank" rel="noopener noreferrer" aria-label={network.label}>
-                <SocialIcon name={network.icon} />
-              </a>
-            ))}
-          </div>
         </div>
 
         {footer.columns.map((col) => (
@@ -41,24 +34,20 @@ function Footer() {
 
         <div className="footer__col">
           <h4>{fundacionSocial.title}</h4>
-          <ul>
-            {fundacionSocial.team.map((person) => (
-              <li key={person.label}>
-                <a href={person.href} target="_blank" rel="noopener noreferrer">
-                  {person.label} · LinkedIn
-                </a>
-              </li>
+          <div className="footer__social">
+            {fundacionSocial.networks.map((network) => (
+              <a key={network.label} href={network.href} target="_blank" rel="noopener noreferrer" aria-label={network.label}>
+                <SocialIcon name={network.icon} />
+              </a>
             ))}
-            <li>
-              <button
-                type="button"
-                className="footer__admin-link"
-                onClick={() => (isAuthenticated ? logout() : setLoginOpen(true))}
-              >
-                {isAuthenticated ? ui.logout : 'Admin'}
-              </button>
-            </li>
-          </ul>
+          </div>
+          <button
+            type="button"
+            className="footer__admin-link"
+            onClick={() => (isAuthenticated ? logout() : setLoginOpen(true))}
+          >
+            {isAuthenticated ? ui.logout : 'Admin'}
+          </button>
         </div>
       </div>
 

@@ -8,13 +8,30 @@ const MAX_PARAGRAPH_LEN = 800
 const MAX_PARAGRAPHS = 6
 const MAX_HEADING_LEN = 150
 
+function emptyParagraph() {
+  return { heading: '', text: '', video: '', imageFile: null, imagePreview: '', imagePosition: 'below' }
+}
+
 function toParagraphState(content) {
-  if (!content?.length) return [{ heading: '', text: '', video: '' }]
+  if (!content?.length) return [emptyParagraph()]
   return content.map((p) =>
     typeof p === 'string'
-      ? { heading: '', text: p, video: '' }
-      : { heading: p.heading || '', text: p.text || '', video: p.video ? String(p.video) : '' }
+      ? { ...emptyParagraph(), text: p }
+      : {
+          heading: p.heading || '',
+          text: p.text || '',
+          video: p.video ? String(p.video) : '',
+          imageFile: null,
+          imagePreview: p.image || '',
+          imagePosition: p.imagePosition || 'below',
+        }
   )
+}
+
+function truncateText(text, limit) {
+  const trimmed = text.trim()
+  if (trimmed.length <= limit) return trimmed
+  return `${trimmed.slice(0, limit).trimEnd()}…`
 }
 
 function UploadIcon() {
@@ -68,9 +85,11 @@ function CreateBlogModal({ post, onClose, onSaved }) {
   const [title, setTitle] = useState(post?.title || '')
   const [tag, setTag] = useState(post?.tag || '')
   const [paragraphs, setParagraphs] = useState(toParagraphState(post?.content))
+  const [expandedParagraphs, setExpandedParagraphs] = useState(() => new Set())
   const [quote, setQuote] = useState(post?.quote || '')
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(post?.image || '')
+  const [imagePlacement, setImagePlacement] = useState(post?.imagePlacement || 'top')
   const [video, setVideo] = useState(null)
   const [videoPreview, setVideoPreview] = useState(post?.video || '')
   const [video2, setVideo2] = useState(null)
@@ -83,13 +102,32 @@ function CreateBlogModal({ post, onClose, onSaved }) {
   }
 
   const addParagraph = () => {
-    setParagraphs((prev) =>
-      prev.length >= MAX_PARAGRAPHS ? prev : [...prev, { heading: '', text: '', video: '' }]
-    )
+    if (paragraphs.length >= MAX_PARAGRAPHS) return
+    const newIndex = paragraphs.length
+    setParagraphs((prev) => [...prev, emptyParagraph()])
+    setExpandedParagraphs((prev) => new Set(prev).add(newIndex))
   }
 
   const removeParagraph = (index) => {
-    setParagraphs((prev) => (prev.length <= 1 ? prev : prev.filter((_, i) => i !== index)))
+    if (paragraphs.length <= 1) return
+    setParagraphs((prev) => prev.filter((_, i) => i !== index))
+    setExpandedParagraphs((prev) => {
+      const next = new Set()
+      prev.forEach((i) => {
+        if (i < index) next.add(i)
+        else if (i > index) next.add(i - 1)
+      })
+      return next
+    })
+  }
+
+  const toggleParagraph = (index) => {
+    setExpandedParagraphs((prev) => {
+      const next = new Set(prev)
+      if (next.has(index)) next.delete(index)
+      else next.add(index)
+      return next
+    })
   }
 
   const handleImageChange = (event) => {
@@ -104,6 +142,20 @@ function CreateBlogModal({ post, onClose, onSaved }) {
     if (!file) return
     setVideo(file)
     setVideoPreview(URL.createObjectURL(file))
+  }
+
+  const handleParagraphImageChange = (index, event) => {
+    const file = event.target.files?.[0] || null
+    if (!file) return
+    setParagraphs((prev) =>
+      prev.map((p, i) => (i === index ? { ...p, imageFile: file, imagePreview: URL.createObjectURL(file) } : p))
+    )
+  }
+
+  const clearParagraphImage = (index) => {
+    setParagraphs((prev) =>
+      prev.map((p, i) => (i === index ? { ...p, imageFile: null, imagePreview: '' } : p))
+    )
   }
 
   const handleVideo2Change = (event) => {
@@ -142,19 +194,36 @@ function CreateBlogModal({ post, onClose, onSaved }) {
     const formData = new FormData()
     formData.append('title', title.trim())
     formData.append('tag', tag.trim())
-    const contentPayload = paragraphs
+
+    const contentPayload = []
+    const paragraphImageFiles = []
+    paragraphs
       .filter((p) => p.text.trim())
-      .map((p) => {
+      .forEach((p) => {
         const heading = p.heading.trim()
         const videoSlot = p.video ? Number(p.video) : null
-        if (!heading && !videoSlot) return p.text.trim()
+        const hasImage = Boolean(p.imageFile || p.imagePreview)
+        if (!heading && !videoSlot && !hasImage) {
+          contentPayload.push(p.text.trim())
+          return
+        }
         const item = { text: p.text.trim() }
         if (heading) item.heading = heading
         if (videoSlot) item.video = videoSlot
-        return item
+        if (hasImage) {
+          if (p.imagePreview && !p.imageFile) item.image = p.imagePreview
+          item.imagePosition = p.imagePosition || 'below'
+        }
+        const index = contentPayload.length
+        contentPayload.push(item)
+        if (p.imageFile) paragraphImageFiles.push({ index, file: p.imageFile })
       })
     formData.append('content', JSON.stringify(contentPayload))
+    paragraphImageFiles.forEach(({ index, file }) => {
+      formData.append(`paragraph_image_${index}`, file)
+    })
     formData.append('quote', quote.trim())
+    formData.append('imagePlacement', imagePlacement)
     if (image) formData.append('image', image)
     if (video) formData.append('video', video)
     if (video2) formData.append('video2', video2)
@@ -256,48 +325,129 @@ function CreateBlogModal({ post, onClose, onSaved }) {
             />
           </div>
 
+          <div className="create-blog__placement">
+            <span>Posición de la imagen principal en el artículo</span>
+            <div className="create-blog__placement-options">
+              <button
+                type="button"
+                className={imagePlacement === 'top' ? 'create-blog__placement-btn--active' : ''}
+                onClick={() => setImagePlacement('top')}
+              >
+                Arriba del artículo
+              </button>
+              <button
+                type="button"
+                className={imagePlacement === 'bottom' ? 'create-blog__placement-btn--active' : ''}
+                onClick={() => setImagePlacement('bottom')}
+              >
+                Abajo del artículo
+              </button>
+            </div>
+          </div>
+
           <div className="create-blog__paragraphs">
             <span className="create-blog__label-row">
               Párrafos
               <span className="create-blog__counter">{paragraphs.length}/{MAX_PARAGRAPHS}</span>
             </span>
 
-            {paragraphs.map((paragraph, index) => (
-              <div key={index} className="create-blog__paragraph">
-                <input
-                  type="text"
-                  className="create-blog__paragraph-heading"
-                  value={paragraph.heading}
-                  onChange={(event) => updateParagraph(index, 'heading', event.target.value)}
-                  maxLength={MAX_HEADING_LEN}
-                  placeholder="Subtítulo en gris (opcional)"
-                />
-                <textarea
-                  value={paragraph.text}
-                  onChange={(event) => updateParagraph(index, 'text', event.target.value)}
-                  maxLength={MAX_PARAGRAPH_LEN}
-                  rows={3}
-                  placeholder={`Párrafo ${index + 1}`}
-                />
-                <select
-                  className="create-blog__paragraph-video"
-                  value={paragraph.video}
-                  onChange={(event) => updateParagraph(index, 'video', event.target.value)}
+            {paragraphs.map((paragraph, index) => {
+              const isExpanded = expandedParagraphs.has(index)
+              return (
+                <div
+                  key={index}
+                  className={`create-blog__paragraph ${isExpanded ? 'create-blog__paragraph--open' : ''}`}
                 >
-                  <option value="">Sin video después de este párrafo</option>
-                  <option value="1">Video 1 después de este párrafo</option>
-                  <option value="2">Video 2 después de este párrafo</option>
-                </select>
-                <div className="create-blog__paragraph-footer">
-                  <span className="create-blog__counter">{paragraph.text.length}/{MAX_PARAGRAPH_LEN}</span>
-                  {paragraphs.length > 1 && (
-                    <button type="button" className="create-blog__remove" onClick={() => removeParagraph(index)}>
-                      Quitar
-                    </button>
+                  <button
+                    type="button"
+                    className="create-blog__paragraph-toggle"
+                    onClick={() => toggleParagraph(index)}
+                    aria-expanded={isExpanded}
+                  >
+                    <span className="create-blog__paragraph-toggle-text">
+                      Párrafo {index + 1}{paragraph.heading ? ` · ${paragraph.heading}` : ''}
+                    </span>
+                    <span className="create-blog__paragraph-chevron" aria-hidden="true">
+                      {isExpanded ? '−' : '+'}
+                    </span>
+                  </button>
+
+                  {!isExpanded && paragraph.text && (
+                    <p className="create-blog__paragraph-preview">{truncateText(paragraph.text, 110)}</p>
+                  )}
+
+                  {isExpanded && (
+                    <div className="create-blog__paragraph-body">
+                      <input
+                        type="text"
+                        className="create-blog__paragraph-heading"
+                        value={paragraph.heading}
+                        onChange={(event) => updateParagraph(index, 'heading', event.target.value)}
+                        maxLength={MAX_HEADING_LEN}
+                        placeholder="Subtítulo en gris (opcional)"
+                      />
+                      <textarea
+                        value={paragraph.text}
+                        onChange={(event) => updateParagraph(index, 'text', event.target.value)}
+                        maxLength={MAX_PARAGRAPH_LEN}
+                        rows={3}
+                        placeholder={`Párrafo ${index + 1}`}
+                      />
+                      <select
+                        className="create-blog__paragraph-video"
+                        value={paragraph.video}
+                        onChange={(event) => updateParagraph(index, 'video', event.target.value)}
+                      >
+                        <option value="">Sin video después de este párrafo</option>
+                        <option value="1">Video 1 después de este párrafo</option>
+                        <option value="2">Video 2 después de este párrafo</option>
+                      </select>
+
+                      <div className="create-blog__paragraph-image">
+                        <FileDropField
+                          label="Imagen del párrafo (opcional)"
+                          hint="Subir imagen"
+                          accept="image/*"
+                          preview={paragraph.imagePreview}
+                          onChange={(event) => handleParagraphImageChange(index, event)}
+                          onClear={() => clearParagraphImage(index)}
+                        />
+                        {paragraph.imagePreview && (
+                          <div className="create-blog__paragraph-position">
+                            <span>Posición</span>
+                            <div className="create-blog__paragraph-position-options">
+                              <button
+                                type="button"
+                                className={paragraph.imagePosition === 'above' ? 'create-blog__paragraph-position-btn--active' : ''}
+                                onClick={() => updateParagraph(index, 'imagePosition', 'above')}
+                              >
+                                Arriba del texto
+                              </button>
+                              <button
+                                type="button"
+                                className={paragraph.imagePosition === 'below' ? 'create-blog__paragraph-position-btn--active' : ''}
+                                onClick={() => updateParagraph(index, 'imagePosition', 'below')}
+                              >
+                                Abajo del texto
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="create-blog__paragraph-footer">
+                        <span className="create-blog__counter">{paragraph.text.length}/{MAX_PARAGRAPH_LEN}</span>
+                        {paragraphs.length > 1 && (
+                          <button type="button" className="create-blog__remove" onClick={() => removeParagraph(index)}>
+                            Eliminar párrafo
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   )}
                 </div>
-              </div>
-            ))}
+              )
+            })}
 
             {paragraphs.length < MAX_PARAGRAPHS && (
               <button type="button" className="create-blog__add" onClick={addParagraph}>

@@ -116,6 +116,20 @@ function BlogPost({ slug }) {
   if (usedVideoSlots.has(1) && post.video) consumedVideoUrls.add(post.video)
   if (usedVideoSlots.has(2) && post.video2) consumedVideoUrls.add(post.video2)
 
+  const heroImage = (post.heroImage || post.image) && !post.videos?.length && (
+    <img
+      className={`blog-post__hero ${post.heroCompact ? 'blog-post__hero--compact' : ''}`}
+      src={post.heroImage || post.image}
+      alt={post.title}
+      style={
+        post.heroImage
+          ? post.heroImagePosition ? { objectPosition: post.heroImagePosition } : undefined
+          : post.imagePosition ? { objectPosition: post.imagePosition } : undefined
+      }
+    />
+  )
+  const heroAtBottom = post.imagePlacement === 'bottom'
+
   return (
     <>
       <Navbar />
@@ -128,18 +142,7 @@ function BlogPost({ slug }) {
           <span className="blog-post__tag">{post.tag}</span>
           <h1>{post.title}</h1>
 
-          {(post.heroImage || post.image) && !post.videos?.length && (
-            <img
-              className={`blog-post__hero ${post.heroCompact ? 'blog-post__hero--compact' : ''}`}
-              src={post.heroImage || post.image}
-              alt={post.title}
-              style={
-                post.heroImage
-                  ? post.heroImagePosition ? { objectPosition: post.heroImagePosition } : undefined
-                  : post.imagePosition ? { objectPosition: post.imagePosition } : undefined
-              }
-            />
-          )}
+          {!heroAtBottom && heroImage}
 
           <div className="blog-post__body">
             {post.content.map((paragraph, i) => {
@@ -152,7 +155,13 @@ function BlogPost({ slug }) {
                   {paragraph.heading && (
                     <span className="blog-post__paragraph-heading">{paragraph.heading}</span>
                   )}
+                  {paragraph.image && paragraph.imagePosition === 'above' && (
+                    <img className="blog-post__paragraph-image" src={paragraph.image} alt="" />
+                  )}
                   <p>{paragraph.text}</p>
+                  {paragraph.image && paragraph.imagePosition !== 'above' && (
+                    <img className="blog-post__paragraph-image" src={paragraph.image} alt="" />
+                  )}
                   {videoSrc && <VideoBlock item={{ video: videoSrc, preview: post.image }} ui={ui} />}
                 </div>
               )
@@ -192,6 +201,8 @@ function BlogPost({ slug }) {
           {post.video && !post.videos?.length && !consumedVideoUrls.has(post.video) && (
             <VideoBlock item={{ video: post.video, preview: post.image }} ui={ui} />
           )}
+
+          {heroAtBottom && <div className="blog-post__hero-bottom">{heroImage}</div>}
         </article>
       </main>
       <Footer />
