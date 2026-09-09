@@ -1,11 +1,15 @@
-// El backend guarda algunas imágenes como data URL/URL completa (logo/banner
-// de empresa) y otras como el nombre de archivo subido a /uploads (foto de
-// estudiante, portafolio). Esta función normaliza cualquiera de los dos casos
-// a algo que sirva directo como `src`/`href`.
+// El backend guarda las imágenes en tres formas distintas: como data URL o URL
+// completa (logo y banner de empresa), como el nombre del archivo subido (foto
+// de estudiante, portafolio) y en algunos registros viejos como la ruta
+// "/uploads/...". Esta función normaliza las tres a algo que sirva directo como
+// `src`/`href`, agregando el prefijo /practicaya con el que el gateway sirve
+// este backend.
 export function resolveMediaUrl(value) {
   if (!value) return null;
-  if (value.startsWith('data:') || value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/practicaya/uploads/')) {
+  if (value.startsWith('data:') || value.startsWith('http://') || value.startsWith('https://')) {
     return value;
   }
+  if (value.startsWith('/practicaya/uploads/')) return value;
+  if (value.startsWith('/uploads/')) return `/practicaya${value}`;
   return `/practicaya/uploads/${value}`;
 }

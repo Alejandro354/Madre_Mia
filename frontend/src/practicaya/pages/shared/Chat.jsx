@@ -3,6 +3,7 @@ import { Bell, MoreVertical, Paperclip, Smile, Image as ImageIcon, Send, Search,
 import { useSearchParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import useIsMobile from '../../hooks/useIsMobile';
+import { resolveMediaUrl } from '../../utils/media';
 
 // El gateway unificado sirve el backend de practicaya bajo /practicaya.
 const API_URL = '/practicaya';
@@ -115,7 +116,12 @@ const Chat = () => {
                   time: '',
                   unread: false
                 };
-                setContacts(prev => [newContact, ...prev]);
+                // Sin el guardia, abrir el chat de alguien con quien todavía no
+                // hablaste lo agregaba dos veces: en desarrollo React monta el
+                // efecto dos veces y las dos ejecuciones lo insertaban.
+                setContacts(prev =>
+                  prev.some(c => c.id === newContact.id) ? prev : [newContact, ...prev]
+                );
                 setActiveChatId(targetId);
                 setActiveContactName(info.name);
                 setActiveContactAvatar(info.avatarUrl);
@@ -242,7 +248,7 @@ const Chat = () => {
                 {/* Avatar */}
                 {chat.avatarUrl ? (
                   <img 
-                    src={chat.avatarUrl.startsWith('http') ? chat.avatarUrl : `${API_URL}${chat.avatarUrl}`} 
+                    src={resolveMediaUrl(chat.avatarUrl)}
                     alt={chat.name}
                     style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
                   />
@@ -332,7 +338,7 @@ const Chat = () => {
                 )}
                 {activeContactAvatar ? (
                   <img 
-                    src={activeContactAvatar.startsWith('http') ? activeContactAvatar : `${API_URL}${activeContactAvatar}`} 
+                    src={resolveMediaUrl(activeContactAvatar)}
                     alt={activeContactName}
                     style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }}
                   />
