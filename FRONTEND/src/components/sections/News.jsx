@@ -4,7 +4,8 @@ import { useContent } from '../../data/useContent.js'
 import { useBlogPosts } from '../../hooks/useBlogPosts.js'
 import './News.css'
 
-const PAGE_SIZE = 6
+const PAGE_SIZE = 5
+const GRID_SIZE = 3
 
 const TAG_PALETTE = [
   { bg: '#FFE2E5', text: '#E11D48' },
@@ -31,6 +32,83 @@ function buildPageList(current, total) {
   return [...pages]
     .filter((p) => p >= 1 && p <= total)
     .sort((a, b) => a - b)
+}
+
+function NewsCardThumb({ item, color }) {
+  return (
+    <div className="news-card__thumb">
+      {item.image ? (
+        <img
+          className="news-card__image"
+          src={item.image}
+          alt={item.title}
+          style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined}
+        />
+      ) : (
+        <Illustration />
+      )}
+      {item.tag && (
+        <span className="news-card__pill" style={{ background: color.bg, color: color.text }}>
+          {item.tag}
+        </span>
+      )}
+    </div>
+  )
+}
+
+function NewsCardMeta({ item }) {
+  if (!item.date) return null
+  return (
+    <div className="news-card__meta">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2" />
+        <path d="M16 2v4M8 2v4M3 10h18" />
+      </svg>
+      <span>{item.date}</span>
+    </div>
+  )
+}
+
+function NewsCard({ item, ui }) {
+  const color = tagColor(item.tag)
+  return (
+    <article id={item.slug} className="news-card">
+      <a href={`#/blog/${item.slug}`} className="news-card__link">
+        <NewsCardThumb item={item} color={color} />
+        <div className="news-card__body">
+          <NewsCardMeta item={item} />
+          <h3>{item.title}</h3>
+          <p>{item.excerpt}</p>
+          <span className="news-card__more">
+            {ui.readMore}
+            <span aria-hidden="true">→</span>
+          </span>
+        </div>
+      </a>
+    </article>
+  )
+}
+
+function NewsCardWide({ item, ui, reverse }) {
+  const color = tagColor(item.tag)
+  return (
+    <article id={item.slug} className={`news-card news-card--wide ${reverse ? 'news-card--wide-reverse' : ''}`}>
+      <a href={`#/blog/${item.slug}`} className="news-card__link news-card__link--wide">
+        <NewsCardThumb item={item} color={color} />
+        <div className="news-card__body news-card__body--wide">
+          <h3>{item.title}</h3>
+          <p>{item.excerpt}</p>
+          <div className="news-card__footer">
+            <NewsCardMeta item={item} />
+            <span className="news-card__more">
+              {ui.readMore}
+              <span aria-hidden="true">→</span>
+            </span>
+          </div>
+        </div>
+      </a>
+    </article>
+  )
 }
 
 function News() {
@@ -68,6 +146,8 @@ function News() {
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
   const pageItems = items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+  const gridItems = pageItems.slice(0, GRID_SIZE)
+  const wideItems = pageItems.slice(GRID_SIZE)
   const pageList = buildPageList(currentPage, totalPages)
 
   return (
@@ -117,53 +197,18 @@ function News() {
         ) : (
           <>
             <div className="news__grid">
-              {pageItems.map((item) => {
-                const color = tagColor(item.tag)
-                return (
-                  <article key={item.slug} id={item.slug} className="news-card">
-                    <a href={`#/blog/${item.slug}`} className="news-card__link">
-                      <div className="news-card__thumb">
-                        {item.image ? (
-                          <img
-                            className="news-card__image"
-                            src={item.image}
-                            alt={item.title}
-                            style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined}
-                          />
-                        ) : (
-                          <Illustration />
-                        )}
-                        {item.tag && (
-                          <span
-                            className="news-card__pill"
-                            style={{ background: color.bg, color: color.text }}
-                          >
-                            {item.tag}
-                          </span>
-                        )}
-                      </div>
-                      <div className="news-card__body">
-                        {item.date && (
-                          <div className="news-card__meta">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                              <rect x="3" y="4" width="18" height="18" rx="2" />
-                              <path d="M16 2v4M8 2v4M3 10h18" />
-                            </svg>
-                            <span>{item.date}</span>
-                          </div>
-                        )}
-                        <h3>{item.title}</h3>
-                        <p>{item.excerpt}</p>
-                        <span className="news-card__more">
-                          {ui.readMore}
-                          <span aria-hidden="true">→</span>
-                        </span>
-                      </div>
-                    </a>
-                  </article>
-                )
-              })}
+              {gridItems.map((item) => (
+                <NewsCard key={item.slug} item={item} ui={ui} />
+              ))}
             </div>
+
+            {wideItems.length > 0 && (
+              <div className="news__wide-row">
+                {wideItems.map((item, i) => (
+                  <NewsCardWide key={item.slug} item={item} ui={ui} reverse={i === 1} />
+                ))}
+              </div>
+            )}
 
             {totalPages > 1 && (
               <nav className="news__pagination" aria-label="Paginación">
