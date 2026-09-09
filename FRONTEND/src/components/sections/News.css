@@ -292,10 +292,14 @@
   }
 
   .news__search-wrap {
+    flex: none;
+    width: 100%;
     max-width: none;
   }
 
   .news__categories {
+    flex: none;
+    width: 100%;
     justify-content: flex-start;
   }
 
