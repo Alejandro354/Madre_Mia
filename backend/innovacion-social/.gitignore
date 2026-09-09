@@ -1,5 +1,6 @@
 uploads/
-instance/
+instance/*
+!instance/cdn_blog.db
 __pycache__/
 *.pyc
 venv/
