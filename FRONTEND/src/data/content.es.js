@@ -32,6 +32,11 @@ export const ui = {
   searchPlaceholder: 'Buscar historias…',
   allCategories: 'Todas',
   noResults: 'No encontramos historias con esos filtros.',
+  featuredBadge: 'Destacado',
+  readArticle: 'Leer artículo',
+  readMore: 'Leer más',
+  prevPage: 'Página anterior',
+  nextPage: 'Página siguiente',
 }
 
 export const nav = {

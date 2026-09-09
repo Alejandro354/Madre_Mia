@@ -32,6 +32,11 @@ export const ui = {
   searchPlaceholder: 'Search stories…',
   allCategories: 'All',
   noResults: "We couldn't find stories matching those filters.",
+  featuredBadge: 'Featured',
+  readArticle: 'Read article',
+  readMore: 'Read more',
+  prevPage: 'Previous page',
+  nextPage: 'Next page',
 }
 
 export const nav = {
