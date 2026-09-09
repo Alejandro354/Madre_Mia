@@ -1,0 +1,44 @@
+.scroll-fab {
+  position: fixed;
+  right: var(--space-md);
+  bottom: var(--space-md);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.15s ease;
+}
+
+.scroll-fab--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-fab:hover {
+  background: var(--color-primary-dark);
+}
+
+.scroll-fab__icon {
+  display: flex;
+  transition: transform 0.25s ease;
+}
+
+.scroll-fab__icon--up {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 560px) {
+  .scroll-fab {
+    right: var(--space-sm);
+    bottom: var(--space-sm);
+  }
+}

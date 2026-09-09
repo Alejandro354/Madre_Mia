@@ -19,11 +19,11 @@ from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
 
 GATEWAY_DIR = Path(__file__).resolve().parent
-ROOT_DIR = GATEWAY_DIR.parent.parent  # .../Proyecto_Madre_Mia
+BACKEND_DIR = GATEWAY_DIR.parent / "backend"
 
-INNOVACION_SOCIAL_BACKEND = ROOT_DIR / "innovacion-social" / "BACKEND"
-PRACTICAYA_BACKEND = ROOT_DIR / "empresa" / "practicaya" / "empresa" / "backend"
-PRACTICANTES_BACKEND = ROOT_DIR / "practicantes" / "backend"
+INNOVACION_SOCIAL_BACKEND = BACKEND_DIR / "innovacion-social"
+PRACTICAYA_BACKEND = BACKEND_DIR / "practicaya"
+PRACTICANTES_BACKEND = BACKEND_DIR / "practicantes"
 
 # Nombres de módulos de nivel superior que cada backend deja registrados en
 # sys.modules al importarse (directos + los que sus propios archivos
@@ -91,9 +91,9 @@ def build_gateway():
 if __name__ == "__main__":
     application = build_gateway()
     print("Gateway corriendo en http://localhost:5000")
-    print("  /              -> innovacion-social")
-    print("  /practicaya    -> empresa/practicaya")
-    print("  /practicantes  -> practicantes")
+    print("  /              -> backend/innovacion-social")
+    print("  /practicaya    -> backend/practicaya")
+    print("  /practicantes  -> backend/practicantes")
     run_simple(
         "0.0.0.0",
         5000,

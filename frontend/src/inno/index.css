@@ -1,0 +1,18 @@
+@import './styles/variables.css';
+
+/* El reset y las reglas de body/h1/p/a/ul/img de este sitio viven ahora en
+   src/styles/base.css, acotadas a .w-inno para no pisar a los otros dos
+   sistemas que comparten la misma página. */
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+}

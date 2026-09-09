@@ -1,0 +1,221 @@
+.spotlight {
+  background: var(--color-dark-black);
+  margin-top: -96px;
+}
+
+.spotlight__card {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 380px;
+  overflow: hidden;
+}
+
+.spotlight__slide {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.spotlight__slide--active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.spotlight__card .illustration {
+  height: 100%;
+  width: 100%;
+  border-radius: 0;
+}
+
+.spotlight__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.spotlight__top {
+  position: absolute;
+  top: var(--space-md);
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.spotlight__eyebrow {
+  color: var(--color-primary-light);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.spotlight__counter {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.spotlight__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 3.5rem;
+  background: linear-gradient(180deg, rgba(26, 26, 26, 0.5) 0%, rgba(26, 26, 26, 0.58) 45%, rgba(26, 26, 26, 0.72) 100%);
+}
+
+.spotlight__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.spotlight__overlay .spotlight__content {
+  padding-left: 4.75rem;
+}
+
+.spotlight__badge {
+  display: inline-flex;
+  align-self: flex-start;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+}
+
+.spotlight__overlay h2 {
+  color: #fff;
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  font-weight: 800;
+  max-width: 620px;
+  line-height: 1.15;
+}
+
+.spotlight__overlay p {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1rem;
+  max-width: 480px;
+  margin-top: 0.5rem;
+}
+
+.spotlight__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-pill);
+  width: fit-content;
+  transition: background-color 0.15s ease, gap 0.15s ease, transform 0.15s ease;
+}
+
+.spotlight__link:hover {
+  background: var(--color-primary-dark);
+  gap: 0.7rem;
+  transform: translateY(-2px);
+}
+
+.spotlight__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(26, 26, 26, 0.45);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.spotlight__arrow:hover {
+  background: var(--color-primary);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.spotlight__arrow--prev {
+  left: var(--space-md);
+}
+
+.spotlight__arrow--next {
+  right: var(--space-md);
+}
+
+@media (max-width: 700px) {
+  .spotlight__arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+}
+
+.spotlight__dots {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.spotlight__dot {
+  width: 22px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.2s ease, width 0.2s ease;
+}
+
+.spotlight__dot--active {
+  background: var(--color-primary);
+  width: 34px;
+}
+
+@media (max-width: 700px) {
+  .spotlight__card {
+    height: 100vh;
+    min-height: 340px;
+  }
+
+  .spotlight__overlay {
+    padding-bottom: 3rem;
+  }
+
+  .spotlight__overlay p {
+    display: none;
+  }
+
+  .spotlight__overlay .spotlight__content {
+    padding-left: 3.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .spotlight {
+    margin-top: -82px;
+  }
+}

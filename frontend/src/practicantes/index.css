@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Preflight está apagado en tailwind.config.js: el reset compartido de los
+   tres sistemas vive en src/styles/base.css. Aquí solo queda lo que Preflight
+   aportaba y este sistema sí necesita, acotado a su mundo.
+
+   .pr-card y .pr-btn-primary llevan prefijo porque PracticaYa ya define .card
+   y .btn-primary con otro diseño, y ahora ambos comparten la misma página. */
+
+@layer base {
+  .w-prac {
+    @apply bg-background text-text-primary font-sans;
+  }
+  :where(.w-prac) :where(h1, h2, h3) {
+    @apply font-display;
+  }
+  :where(.w-prac) :where(a) {
+    color: inherit;
+  }
+  :where(.w-prac) :where(ul, ol) {
+    list-style: none;
+  }
+  :where(.w-prac) :where(img, svg, video) {
+    display: block;
+    max-width: 100%;
+  }
+  :where(.w-prac) :where(code) {
+    @apply font-mono bg-surface text-text-secondary px-1.5 py-0.5 rounded text-[12.5px];
+  }
+}
+
+@layer components {
+  .pr-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold text-sm px-4 py-2.5 rounded-lg hover:opacity-90 transition disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 bg-white border border-border text-text-primary font-medium text-sm px-4 py-2 rounded-lg hover:bg-surface transition;
+  }
+  .btn-danger-ghost {
+    @apply inline-flex items-center justify-center gap-2 bg-white border border-primary-light text-primary font-medium text-xs px-3 py-1.5 rounded-lg hover:bg-primary-light transition;
+  }
+  .input-field {
+    @apply w-full bg-white border border-border rounded-lg px-3 py-2.5 text-sm text-text-primary placeholder:text-disabled-text focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition;
+  }
+  .pr-card {
+    @apply bg-white border border-border rounded-card shadow-sm;
+  }
+  .panel {
+    @apply pr-card p-6;
+  }
+  .tab-link {
+    @apply text-sm px-4 py-2 rounded-full border border-border text-text-secondary bg-white hover:bg-surface transition whitespace-nowrap;
+  }
+  .tab-link-active {
+    @apply bg-primary border-primary text-white font-medium;
+  }
+  .field-label {
+    @apply text-[11px] uppercase tracking-wide text-text-secondary mb-1;
+  }
+}
