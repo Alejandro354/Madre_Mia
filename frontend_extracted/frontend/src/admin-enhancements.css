@@ -1,0 +1,129 @@
+/* ==========================================================================
+   admin-enhancements.css
+   Capa aditiva de UI/UX para el panel administrativo.
+   No reemplaza nada de App.css: solo suma detalle visual sobre las mismas
+   clases (.stat-card, .chart-card, .domain-card, .sidebar, etc.) para que la
+   integración sea segura y fácil de revisar o revertir (basta con quitar el
+   <link>/import).
+   ========================================================================== */
+
+:root {
+  --admin-shadow-sm: 0 1px 2px rgba(17, 20, 34, 0.05), 0 1px 1px rgba(17, 20, 34, 0.03);
+  --admin-shadow-md: 0 8px 24px rgba(17, 20, 34, 0.08);
+  --admin-shadow-lg: 0 20px 40px rgba(17, 20, 34, 0.12);
+  --admin-radius: 16px;
+  --admin-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* ---------- Tarjetas de indicadores (StatCard) ---------- */
+.stat-card {
+  box-shadow: var(--admin-shadow-sm);
+  transition: transform 0.16s var(--admin-ease), box-shadow 0.16s var(--admin-ease),
+    border-color 0.16s var(--admin-ease);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+  border-color: transparent;
+}
+
+.stat-card-bar {
+  border-radius: 999px 0 0 999px;
+}
+
+.stat-card-value {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Tarjetas de gráficos (ChartCard) ---------- */
+.chart-card {
+  box-shadow: var(--admin-shadow-sm);
+  transition: box-shadow 0.16s var(--admin-ease);
+}
+
+.chart-card:hover {
+  box-shadow: var(--admin-shadow-md);
+}
+
+.chart-card-title {
+  letter-spacing: -0.01em;
+}
+
+.chart-empty {
+  flex-direction: column;
+  gap: 8px;
+  border: 1.5px dashed var(--border);
+  border-radius: 12px;
+  margin: 4px;
+}
+
+.chart-empty::before {
+  content: '';
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1.5px dashed var(--disabled-text);
+}
+
+/* ---------- Tarjetas de selección de dominio ---------- */
+.domain-card {
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.domain-card:hover {
+  box-shadow: var(--admin-shadow-lg);
+}
+
+.domain-card-action {
+  transition: gap 0.16s var(--admin-ease);
+}
+
+.domain-card:hover .domain-card-action {
+  color: var(--primary);
+}
+
+/* ---------- Sidebar admin: acento visual sutil ---------- */
+.sidebar-link--active {
+  box-shadow: var(--admin-shadow-sm);
+}
+
+/* ---------- Filtro de fechas: chips más táctiles ---------- */
+.date-chip {
+  transition: transform 0.1s var(--admin-ease), background-color 0.16s var(--admin-ease),
+    color 0.16s var(--admin-ease), border-color 0.16s var(--admin-ease);
+}
+
+.date-chip:active {
+  transform: scale(0.97);
+}
+
+/* ---------- Tablas de reportes: filas más legibles ---------- */
+.report-table tbody tr,
+table tbody tr {
+  transition: background-color 0.12s var(--admin-ease);
+}
+
+.report-table tbody tr:hover,
+table tbody tr:hover {
+  background-color: var(--surface);
+}
+
+/* ---------- Foco accesible consistente en todo el panel admin ---------- */
+.app-layout :is(button, a, input, select):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- Botones de descarga / acción secundaria ---------- */
+.domain-report-link,
+.admin-back-link {
+  transition: transform 0.12s var(--admin-ease), opacity 0.16s var(--admin-ease);
+}
+
+.domain-report-link:active {
+  transform: scale(0.98);
+}
