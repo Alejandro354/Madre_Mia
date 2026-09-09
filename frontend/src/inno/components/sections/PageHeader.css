@@ -1,0 +1,206 @@
+.cdn-page-header {
+  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg) 100%);
+  padding: var(--space-xl) 0 var(--space-lg);
+  text-align: center;
+}
+
+.cdn-page-header__eyebrow {
+  display: inline-block;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  opacity: 0;
+  animation: pageHeaderFadeUp 0.6s ease forwards;
+}
+
+.cdn-page-header__title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  max-width: 640px;
+  margin: 0 auto var(--space-sm);
+  opacity: 0;
+  animation: pageHeaderFadeUp 0.7s ease 0.1s forwards;
+}
+
+.cdn-page-header__title--stacked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
+  line-height: 1.05;
+  margin-bottom: var(--space-md);
+}
+
+.cdn-page-header__title-line {
+  font-size: clamp(2.4rem, 5.5vw, 3.75rem);
+}
+
+.cdn-page-header__title-line--accent {
+  display: inline-block;
+  color: var(--color-primary);
+  animation: pageHeaderAccentPulse 3.2s ease-in-out 1s infinite;
+}
+
+.cdn-page-header__tagline {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+  opacity: 0;
+  animation: pageHeaderFadeUp 0.7s ease 0.2s forwards;
+}
+
+.cdn-page-header__subtitle {
+  font-size: 1.05rem;
+  max-width: 560px;
+  margin: 0 auto;
+  opacity: 0;
+  animation: pageHeaderFadeUp 0.7s ease 0.3s forwards;
+}
+
+@keyframes pageHeaderFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageHeaderAccentPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cdn-page-header__eyebrow,
+  .cdn-page-header__title,
+  .cdn-page-header__tagline,
+  .cdn-page-header__subtitle,
+  .cdn-page-header__title-line--accent {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+.cdn-page-header--split {
+  text-align: left;
+}
+
+.cdn-page-header__grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.cdn-page-header--split .cdn-page-header__eyebrow {
+  color: var(--color-primary);
+}
+
+.cdn-page-header--split .cdn-page-header__title,
+.cdn-page-header--split .cdn-page-header__subtitle {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.cdn-page-header--split .cdn-page-header__title {
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.cdn-page-header--split .cdn-page-header__title--stacked {
+  align-items: flex-start;
+}
+
+.cdn-page-header__stats {
+  display: flex;
+  gap: var(--space-lg);
+  padding-top: var(--space-md);
+  margin-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.cdn-page-header__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cdn-page-header__stat-value {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--color-text-primary);
+}
+
+.cdn-page-header__stat-label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.cdn-page-header__media {
+  max-width: 440px;
+  margin-left: auto;
+  text-align: center;
+}
+
+.cdn-page-header__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 4.4;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.cdn-page-header__image-caption {
+  display: block;
+  margin-top: var(--space-sm);
+  font-family: 'Dancing Script', cursive;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 860px) {
+  .cdn-page-header__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cdn-page-header__media {
+    margin: 0 auto;
+  }
+
+  .cdn-page-header--split {
+    text-align: center;
+  }
+
+  .cdn-page-header--split .cdn-page-header__title--stacked {
+    align-items: center;
+  }
+
+  .cdn-page-header__stats {
+    justify-content: center;
+  }
+
+  .cdn-page-header__media {
+    order: -1;
+    margin-bottom: var(--space-md);
+  }
+
+  .cdn-page-header__image {
+    aspect-ratio: 4 / 3;
+  }
+}

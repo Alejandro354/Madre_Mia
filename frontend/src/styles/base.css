@@ -1,0 +1,115 @@
+/* =========================================================
+   Reset compartido por los tres sistemas + reglas globales
+   de cada uno, acotadas a su "mundo".
+
+   Los tres proyectos traían su propio reset y su propia regla
+   para body / h1..h6 / p / a / ul. Puestas todas juntas se
+   pisaban entre sí (la última cargada ganaba para todos), así
+   que aquí queda una sola base común y lo que era específico
+   de cada sistema cuelga de la clase de su contenedor:
+
+     .w-inno   innovacion-social
+     .w-pya    PracticaYa
+     .w-prac   Practicantes
+
+   Las reglas por mundo usan :where() a propósito: eso deja su
+   especificidad en cero, igual que cuando eran selectores de
+   elemento sueltos. Sin :where(), ".w-inno p" (0,2,0) le
+   ganaría a cualquier clase de componente y rompería los
+   estilos que hoy funcionan.
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* --------------------- innovacion-social --------------------- */
+
+.w-inno {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+}
+
+:where(.w-inno) :where(h1, h2, h3, h4) {
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+:where(.w-inno) :where(p) {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+:where(.w-inno) :where(a) {
+  color: inherit;
+}
+
+:where(.w-inno) :where(ul) {
+  list-style: none;
+}
+
+:where(.w-inno) :where(img, svg) {
+  display: block;
+  max-width: 100%;
+}
+
+/* ------------------------- PracticaYa ------------------------- */
+
+.w-pya {
+  min-height: 100vh;
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+:where(.w-pya) :where(h1, h2, h3, h4, h5, h6) {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ------------------------ Practicantes ------------------------ */
+/* El resto (fuentes, code, listas, imágenes) vive en
+   src/practicantes/index.css, que es la entrada de Tailwind. */
+
+.w-prac {
+  min-height: 100vh;
+}
