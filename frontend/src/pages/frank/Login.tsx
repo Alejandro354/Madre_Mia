@@ -1,9 +1,9 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { ApiError } from "../../lib/api";
-import { Zap, ArrowLeftRight } from "lucide-react";
+import { Zap, ArrowLeftRight, ArrowLeft } from "lucide-react";
 
 export default function FrankLogin() {
   const { loginFrank, logoutWil, sesion } = useAuth();
@@ -36,10 +36,13 @@ export default function FrankLogin() {
           <p className="text-sm text-text-primary mb-4">
             Ya tienes una sesión activa en Portal Practicantes. Ciérrala para entrar al Panel Administrador.
           </p>
-          <button onClick={cerrarWilYContinuar} disabled={cambiando} className="btn-primary w-full inline-flex items-center justify-center gap-2">
+          <button onClick={cerrarWilYContinuar} disabled={cambiando} className="btn-primary w-full inline-flex items-center justify-center gap-2 mb-3">
             <ArrowLeftRight size={16} />
             {cambiando ? "Cerrando sesión…" : "Cerrar sesión de Practicantes y continuar"}
           </button>
+          <Link to="/" className="text-sm text-text-secondary hover:text-text-primary inline-flex items-center gap-1">
+            <ArrowLeft size={14} /> Volver
+          </Link>
         </div>
       </div>
     );
@@ -68,6 +71,9 @@ export default function FrankLogin() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
+        <Link to="/" className="text-sm text-text-secondary hover:text-text-primary inline-flex items-center gap-1 mb-4">
+          <ArrowLeft size={14} /> Volver
+        </Link>
         <div className="flex items-center gap-2 justify-center mb-6">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
             <Zap size={18} className="text-white" fill="white" />

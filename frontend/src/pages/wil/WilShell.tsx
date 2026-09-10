@@ -4,7 +4,6 @@ import { apiGet, urlArchivo, ApiError } from "../../lib/api";
 import type { Practicante } from "../../types";
 import Avatar from "../../components/Avatar";
 import EstadoPill from "../../components/EstadoPill";
-import SectionTabs from "../../components/SectionTabs";
 import Lightbox from "../../components/Lightbox";
 
 interface Ctx {
@@ -61,16 +60,6 @@ export default function WilShell() {
           </p>
         </div>
       </header>
-
-      <SectionTabs
-        items={[
-          { to: "/wil/perfil", label: "Perfil" },
-          { to: "/wil/documentos", label: "Documentos" },
-          { to: "/wil/avances", label: "Cargar avances" },
-          { to: "/wil/calificaciones", label: "Seguimiento" },
-          { to: "/wil/historial", label: "Historial" },
-        ]}
-      />
 
       <Outlet context={{ practicante, recargar: cargar } satisfies Ctx} />
       <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
