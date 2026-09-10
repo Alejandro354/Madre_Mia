@@ -4,6 +4,7 @@ import Footer from '../components/layout/Footer.jsx'
 import PageHeader from '../components/sections/PageHeader.jsx'
 import AboutHistory from '../components/sections/AboutHistory.jsx'
 import VideoShowcase from '../components/sections/VideoShowcase.jsx'
+import AndresVideo from '../components/sections/AndresVideo.jsx'
 import { useContent } from '../data/useContent.js'
 
 function Historia() {
@@ -23,6 +24,7 @@ function Historia() {
           tagline={historyPage.tagline}
         />
         <AboutHistory />
+        <AndresVideo />
       </main>
       <Footer />
     </>

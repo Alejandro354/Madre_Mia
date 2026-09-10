@@ -24,6 +24,7 @@ BACKEND_DIR = GATEWAY_DIR.parent / "backend"
 INNOVACION_SOCIAL_BACKEND = BACKEND_DIR / "innovacion-social"
 PRACTICAYA_BACKEND = BACKEND_DIR / "practicaya"
 PRACTICANTES_BACKEND = BACKEND_DIR / "practicantes"
+DASHBOARD_BACKEND = BACKEND_DIR / "dashboard"
 
 # Nombres de módulos de nivel superior que cada backend deja registrados en
 # sys.modules al importarse (directos + los que sus propios archivos
@@ -35,6 +36,16 @@ PRACTICAYA_MODULES = [
     "notifications", "admin", "models", "helpers", "utils",
 ]
 PRACTICANTES_MODULES = ["app", "database"]
+# "config", "db" y "utils" son nombres cortos que ya usan otros backends
+# (p.ej. practicaya trae su propio utils.py); por eso el dashboard se carga
+# después de limpiar sys.modules de los anteriores, y se limpia a su vez
+# aquí (incluye los submódulos de los paquetes routes/services/utils).
+DASHBOARD_MODULES = [
+    "app", "config", "db",
+    "routes", "routes.dashboard_routes", "routes.reportes_routes",
+    "services", "services.dashboard_service", "services.reportes_service",
+    "utils", "utils.auth", "utils.dates", "utils.export",
+]
 
 
 def _load_flask_app(backend_dir, module_names, factory_attr=None):
@@ -81,9 +92,14 @@ def build_gateway():
         for name in PRACTICANTES_MODULES:
             sys.modules.pop(name, None)
 
+    dashboard_app = _load_flask_app(
+        DASHBOARD_BACKEND, DASHBOARD_MODULES, factory_attr="create_app"
+    )
+
     application = DispatcherMiddleware(innovacion_app, {
         "/practicaya": practicaya_app,
         "/practicantes": practicantes_app,
+        "/panel": dashboard_app,
     })
     return application
 
@@ -94,6 +110,7 @@ if __name__ == "__main__":
     print("  /              -> backend/innovacion-social")
     print("  /practicaya    -> backend/practicaya")
     print("  /practicantes  -> backend/practicantes")
+    print("  /panel         -> backend/dashboard")
     run_simple(
         "0.0.0.0",
         5000,

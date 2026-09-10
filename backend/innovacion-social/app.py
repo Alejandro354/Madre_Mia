@@ -29,12 +29,20 @@ def create_app():
         inspector = inspect(db.engine)
         if 'blog_posts' in inspector.get_table_names():
             columns = {col['name'] for col in inspector.get_columns('blog_posts')}
-            if 'image_placement' not in columns:
-                with db.engine.connect() as conn:
-                    conn.execute(text(
-                        "ALTER TABLE blog_posts ADD COLUMN image_placement VARCHAR(10) DEFAULT 'top' NOT NULL"
-                    ))
-                    conn.commit()
+            missing_columns = {
+                'image_placement': "ALTER TABLE blog_posts ADD COLUMN image_placement VARCHAR(10) DEFAULT 'top' NOT NULL",
+                'tags': "ALTER TABLE blog_posts ADD COLUMN tags TEXT DEFAULT '[]' NOT NULL",
+                'tag_en': "ALTER TABLE blog_posts ADD COLUMN tag_en VARCHAR(120)",
+                'title_en': "ALTER TABLE blog_posts ADD COLUMN title_en VARCHAR(120)",
+                'excerpt_en': "ALTER TABLE blog_posts ADD COLUMN excerpt_en VARCHAR(300)",
+                'content_en': "ALTER TABLE blog_posts ADD COLUMN content_en TEXT DEFAULT '[]' NOT NULL",
+                'quote_en': "ALTER TABLE blog_posts ADD COLUMN quote_en TEXT",
+            }
+            with db.engine.connect() as conn:
+                for column_name, ddl in missing_columns.items():
+                    if column_name not in columns:
+                        conn.execute(text(ddl))
+                conn.commit()
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(blog_bp)

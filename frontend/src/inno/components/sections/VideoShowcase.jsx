@@ -3,7 +3,7 @@ import SectionHeader from '../ui/SectionHeader.jsx'
 import { useContent } from '../../data/useContent.js'
 import './VideoShowcase.css'
 
-function VideoCard({ item, ui }) {
+export function VideoCard({ item, ui }) {
   const videoRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
 

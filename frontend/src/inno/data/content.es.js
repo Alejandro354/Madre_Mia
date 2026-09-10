@@ -11,6 +11,8 @@ import centroExcelencia from '../assets/Centro-de-Excelencia.jpg'
 import cadenaTrabajadores from '../assets/CadenaTrabajadores.jpg'
 import historyVideo from '../assets/VideoJeronimo1.mp4'
 import marlonVideo from '../assets/VideoMarlon.mp4'
+import santiagoVideo from '../assets/VideoSantiago.mp4'
+import andresVideoFile from '../assets/VideoAndres.mp4'
 
 export const ui = {
   locale: 'es-CO',
@@ -67,15 +69,20 @@ export const stats = [
 
 export const history = {
   title: 'Nuestra historia en el Centro de Excelencia',
-  paragraph:
-    'Nacimos para ayudar a marcas a comunicar con claridad y creatividad en redes sociales. Hoy somos un equipo multidisciplinario de estrategas, diseñadores y creadores de contenido.',
-  bullets: [
-    'Diseñamos estrategias de contenido a la medida de cada marca.',
-    'Gestionamos pauta digital con foco en resultados medibles.',
-    'Acompañamos el crecimiento en redes con datos, no intuición.',
+  paragraphs: [
+    'El Centro de Excelencia es una apuesta por el desarrollo del territorio a través de la innovación social, conectando la formación con oportunidades reales de inserción laboral y acercando el talento joven al empleo formal.',
+    'Desde Santa Fe de Antioquia, fortalece capacidades y articula conocimiento, talento y empresa para impulsar la transformación social y económica del Occidente antioqueño.',
   ],
   mainImage: centroExcelencia,
   secondaryImage: cadenaTrabajadores,
+}
+
+export const andresVideo = {
+  eyebrow: 'Historias reales',
+  sectionTitle: 'Una historia más para contar',
+  title: 'Andrés Felipe Correa Villa nos cuenta',
+  subtitle: 'Líder TI en el Centro de Excelencia',
+  video: andresVideoFile,
 }
 
 export const videoShowcase = {
@@ -93,9 +100,9 @@ export const videoShowcase = {
       video: marlonVideo,
     },
     {
-      title: 'Próximamente',
-      subtitle: 'Nuevo video en camino',
-      poster: voluntariados,
+      title: 'Santiago Andrés Durango Ospina nos cuenta',
+      subtitle: 'Su experiencia en Innovación Social de Cadena',
+      video: santiagoVideo,
     },
   ],
 }
@@ -112,23 +119,23 @@ export const services = {
   title: 'Qué hacemos',
   items: [
     {
-      title: 'Conocemos el territorio',
-      description: 'Nos acercamos a las comunidades, escuchamos sus historias y entendemos sus necesidades, ideas y oportunidades.',
+      title: 'Semillero de talento joven',
+      description: 'Diagnóstico vocacional y selección con eje en vulnerabilidad.',
       image: reunionCadena,
     },
     {
-      title: 'Acompañamos a las personas',
-      description: 'Estamos presentes en sus procesos, apoyando espacios de aprendizaje, crecimiento y desarrollo de nuevas habilidades.',
+      title: 'Desarrollo de capacidades',
+      description: 'Formación técnica y habilidades para el mercado laboral.',
       image: practicantes2,
     },
     {
-      title: 'Creamos conexiones',
-      description: 'Unimos personas, empresas, instituciones y oportunidades para que puedan surgir nuevas experiencias, aprendizajes y caminos.',
+      title: 'Inserción laboral efectiva',
+      description: 'Teoría del cambio aplicada a rutas de empleabilidad.',
       image: equipoCadena,
     },
     {
-      title: 'Impulsamos cambios que permanezcan',
-      description: 'Buscamos que cada iniciativa deje algo valioso, pueda seguir creciendo y continúe generando oportunidades para más personas.',
+      title: 'Agentes digitales de cambio',
+      description: 'Talento digital al servicio de iniciativas de territorio.',
       image: voluntariados,
     },
   ],

@@ -2,27 +2,18 @@ import { useEffect, useMemo, useState } from 'react'
 import Illustration from '../ui/Illustration.jsx'
 import SmartLink from '../ui/SmartLink.jsx'
 import { useContent } from '../../data/useContent.js'
+import { useLanguage } from '../../context/LanguageContext.jsx'
 import { useBlogPosts } from '../../hooks/useBlogPosts.js'
+import { localizePosts } from '../../utils/localizePost.js'
 import './News.css'
 
 const PAGE_SIZE = 5
 const GRID_SIZE = 3
 
-const TAG_PALETTE = [
-  { bg: '#FFE2E5', text: '#E11D48' },
-  { bg: '#DBEAFE', text: '#2563EB' },
-  { bg: '#FCE7F3', text: '#DB2777' },
-  { bg: '#EDE9FE', text: '#7C3AED' },
-  { bg: '#D1FAE5', text: '#059669' },
-  { bg: '#FEF3C7', text: '#B45309' },
-]
+const TAG_COLOR = { bg: 'var(--color-bg-tag)', text: 'var(--color-primary)' }
 
-function tagColor(tag = '') {
-  let hash = 0
-  for (let i = 0; i < tag.length; i += 1) {
-    hash = (hash * 31 + tag.charCodeAt(i)) >>> 0
-  }
-  return TAG_PALETTE[hash % TAG_PALETTE.length]
+function tagColor() {
+  return TAG_COLOR
 }
 
 function buildPageList(current, total) {
@@ -93,7 +84,11 @@ function NewsCard({ item, ui }) {
 function NewsCardWide({ item, ui, reverse }) {
   const color = tagColor(item.tag)
   return (
-    <article id={item.slug} className={`news-card news-card--wide ${reverse ? 'news-card--wide-reverse' : ''}`}>
+    <article
+      id={item.slug}
+      className={`news-card news-card--wide ${reverse ? 'news-card--wide-reverse' : ''}`}
+      style={{ background: color.bg }}
+    >
       <SmartLink href={`/blog/${item.slug}`} className="news-card__link news-card__link--wide">
         <NewsCardThumb item={item} color={color} />
         <div className="news-card__body news-card__body--wide">
@@ -114,12 +109,16 @@ function NewsCardWide({ item, ui, reverse }) {
 
 function News() {
   const { news, ui } = useContent()
+  const { language } = useLanguage()
   const { posts } = useBlogPosts()
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('all')
   const [page, setPage] = useState(1)
 
-  const allItems = useMemo(() => [...posts, ...news.items], [posts, news.items])
+  const allItems = useMemo(
+    () => [...localizePosts(posts, language), ...news.items],
+    [posts, news.items, language]
+  )
   const listItems = allItems.slice(1)
 
   const categories = useMemo(() => {
@@ -147,8 +146,12 @@ function News() {
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
   const pageItems = items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-  const gridItems = pageItems.slice(0, GRID_SIZE)
-  const wideItems = pageItems.slice(GRID_SIZE)
+  const trailingItems = pageItems.slice(GRID_SIZE)
+  // The wide highlight row only looks right with its two-card layout. A
+  // single leftover item would stretch to fill the whole row width, so it
+  // falls back to a regular grid card instead.
+  const wideItems = trailingItems.length >= 2 ? trailingItems : []
+  const gridItems = wideItems.length > 0 ? pageItems.slice(0, GRID_SIZE) : pageItems
   const pageList = buildPageList(currentPage, totalPages)
 
   return (
@@ -156,7 +159,7 @@ function News() {
       <div className="container">
         <div className="news__filters">
           <div className="news__search-wrap">
-            <svg className="news__search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg className="news__search-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="7" />
               <path d="m21 21-4.3-4.3" />
             </svg>

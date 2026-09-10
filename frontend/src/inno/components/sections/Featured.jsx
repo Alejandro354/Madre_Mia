@@ -2,15 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Illustration from '../ui/Illustration.jsx'
 import { useContent } from '../../data/useContent.js'
+import { useLanguage } from '../../context/LanguageContext.jsx'
 import { useBlogPosts } from '../../hooks/useBlogPosts.js'
+import { localizePosts } from '../../utils/localizePost.js'
 import './Featured.css'
 
 const AUTO_ADVANCE_MS = 4200
 
 function Featured() {
   const { news, ui } = useContent()
+  const { language } = useLanguage()
   const { posts } = useBlogPosts()
-  const items = [...posts, ...news.items]
+  const items = [...localizePosts(posts, language), ...news.items]
   const [active, setActive] = useState(0)
   const total = items.length
   const timerRef = useRef(null)

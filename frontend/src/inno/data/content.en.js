@@ -11,6 +11,8 @@ import centroExcelencia from '../assets/Centro-de-Excelencia.jpg'
 import cadenaTrabajadores from '../assets/CadenaTrabajadores.jpg'
 import historyVideo from '../assets/VideoJeronimo1.mp4'
 import marlonVideo from '../assets/VideoMarlon.mp4'
+import santiagoVideo from '../assets/VideoSantiago.mp4'
+import andresVideoFile from '../assets/VideoAndres.mp4'
 
 export const ui = {
   locale: 'en-US',
@@ -67,15 +69,20 @@ export const stats = [
 
 export const history = {
   title: 'Our story at the Center of Excellence',
-  paragraph:
-    'We were born to help brands communicate with clarity and creativity on social media. Today we are a multidisciplinary team of strategists, designers and content creators.',
-  bullets: [
-    'We design content strategies tailored to each brand.',
-    'We manage digital advertising with a focus on measurable results.',
-    'We support social growth with data, not guesswork.',
+  paragraphs: [
+    'The Centro de Excelencia is a commitment to the development of the territory through social innovation, connecting training with real job placement opportunities and bringing young talent closer to formal employment.',
+    'From Santa Fe de Antioquia, it strengthens capabilities and brings together knowledge, talent and business to drive the social and economic transformation of Western Antioquia.',
   ],
   mainImage: centroExcelencia,
   secondaryImage: cadenaTrabajadores,
+}
+
+export const andresVideo = {
+  eyebrow: 'Real stories',
+  sectionTitle: 'One more story to tell',
+  title: 'Andrés Felipe Correa Villa tells us',
+  subtitle: 'IT Lead at the Center of Excellence',
+  video: andresVideoFile,
 }
 
 export const videoShowcase = {
@@ -84,7 +91,7 @@ export const videoShowcase = {
   items: [
     {
       title: 'Jerónimo Ávila Sanguino tells us',
-      subtitle: 'What social innovation feels like at Cadena',
+      subtitle: 'His story at Cadena’s Center of Excellence',
       video: historyVideo,
     },
     {
@@ -93,9 +100,9 @@ export const videoShowcase = {
       video: marlonVideo,
     },
     {
-      title: 'Coming soon',
-      subtitle: 'New video on the way',
-      poster: voluntariados,
+      title: 'Santiago Andrés Durango Ospina tells us',
+      subtitle: 'His experience in Social Innovation at Cadena',
+      video: santiagoVideo,
     },
   ],
 }
@@ -112,23 +119,23 @@ export const services = {
   title: 'What we do',
   items: [
     {
-      title: 'We know the territory',
-      description: 'We get close to communities, listen to their stories and understand their needs, ideas and opportunities.',
+      title: 'A seedbed for young talent',
+      description: 'Vocational diagnosis and selection with a focus on vulnerability.',
       image: reunionCadena,
     },
     {
-      title: 'We support people',
-      description: 'We stand by them throughout their journey, supporting spaces for learning, growth and the development of new skills.',
+      title: 'Capability development',
+      description: 'Technical training and skills for the job market.',
       image: practicantes2,
     },
     {
-      title: 'We create connections',
-      description: 'We bring together people, companies, institutions and opportunities so new experiences, lessons and paths can emerge.',
+      title: 'Effective job placement',
+      description: 'Theory of change applied to employability pathways.',
       image: equipoCadena,
     },
     {
-      title: 'We drive change that lasts',
-      description: 'We want every initiative to leave something valuable, keep growing and continue creating opportunities for more people.',
+      title: 'Digital agents of change',
+      description: 'Digital talent serving territorial initiatives.',
       image: voluntariados,
     },
   ],

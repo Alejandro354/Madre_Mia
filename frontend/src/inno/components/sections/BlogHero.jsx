@@ -1,13 +1,16 @@
 import Illustration from '../ui/Illustration.jsx'
 import SmartLink from '../ui/SmartLink.jsx'
 import { useContent } from '../../data/useContent.js'
+import { useLanguage } from '../../context/LanguageContext.jsx'
 import { useBlogPosts } from '../../hooks/useBlogPosts.js'
+import { localizePosts } from '../../utils/localizePost.js'
 import './BlogHero.css'
 
 function BlogHero() {
   const { blogPage, news, ui } = useContent()
+  const { language } = useLanguage()
   const { posts } = useBlogPosts()
-  const featured = [...posts, ...news.items][0]
+  const featured = [...localizePosts(posts, language), ...news.items][0]
 
   if (!featured) {
     return (

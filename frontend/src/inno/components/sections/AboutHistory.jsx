@@ -10,15 +10,9 @@ function AboutHistory() {
       <div className="container history__grid">
         <div className="history__content">
           <h2>{history.title}</h2>
-          <p className="history__paragraph">{history.paragraph}</p>
-          <ul className="history__list">
-            {history.bullets.map((item) => (
-              <li key={item}>
-                <span className="history__dot" />
-                {item}
-              </li>
-            ))}
-          </ul>
+          {history.paragraphs.map((paragraph, i) => (
+            <p key={i} className="history__paragraph">{paragraph}</p>
+          ))}
         </div>
 
         <div className="history__media">

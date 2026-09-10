@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import { useContent } from '../data/useContent.js'
+import { useLanguage } from '../context/LanguageContext.jsx'
+import { localizePost } from '../utils/localizePost.js'
 import './BlogPost.css'
 
 function VideoBlock({ item, ui }) {
@@ -68,11 +70,12 @@ function VideoBlock({ item, ui }) {
 function BlogPost() {
   const { slug } = useParams()
   const { news, ui } = useContent()
+  const { language } = useLanguage()
   const [dynamicPost, setDynamicPost] = useState(null)
   const [dynamicLoading, setDynamicLoading] = useState(false)
 
   const staticPost = news.items.find((item) => item.slug === slug)
-  const post = staticPost || dynamicPost
+  const post = staticPost || (dynamicPost && localizePost(dynamicPost, language))
 
   useEffect(() => {
     window.scrollTo(0, 0)

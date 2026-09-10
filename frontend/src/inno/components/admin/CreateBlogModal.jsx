@@ -9,23 +9,31 @@ const MAX_PARAGRAPHS = 6
 const MAX_HEADING_LEN = 150
 
 function emptyParagraph() {
-  return { heading: '', text: '', video: '', imageFile: null, imagePreview: '', imagePosition: 'below' }
+  return {
+    heading: '', text: '', headingEn: '', textEn: '',
+    video: '', imageFile: null, imagePreview: '', imagePosition: 'below',
+  }
 }
 
-function toParagraphState(content) {
+function toParagraphState(content, contentEn) {
   if (!content?.length) return [emptyParagraph()]
-  return content.map((p) =>
-    typeof p === 'string'
-      ? { ...emptyParagraph(), text: p }
+  return content.map((p, i) => {
+    const en = contentEn?.[i]
+    const enHeading = (en && typeof en === 'object' && en.heading) || ''
+    const enText = (en && typeof en === 'object' ? en.text : typeof en === 'string' ? en : '') || ''
+    return typeof p === 'string'
+      ? { ...emptyParagraph(), text: p, headingEn: enHeading, textEn: enText }
       : {
           heading: p.heading || '',
           text: p.text || '',
+          headingEn: enHeading,
+          textEn: enText,
           video: p.video ? String(p.video) : '',
           imageFile: null,
           imagePreview: p.image || '',
           imagePosition: p.imagePosition || 'below',
         }
-  )
+  })
 }
 
 function truncateText(text, limit) {
@@ -83,17 +91,22 @@ function CreateBlogModal({ post, onClose, onSaved }) {
   const isEditing = Boolean(post)
   const { token } = useAuth()
   const [title, setTitle] = useState(post?.title || '')
+  const [titleEn, setTitleEn] = useState(post?.titleEn || '')
   const [tag, setTag] = useState(post?.tag || '')
-  const [paragraphs, setParagraphs] = useState(toParagraphState(post?.content))
+  const [tagEn, setTagEn] = useState(post?.tagEn || '')
+  const [paragraphs, setParagraphs] = useState(toParagraphState(post?.content, post?.contentEn))
   const [expandedParagraphs, setExpandedParagraphs] = useState(() => new Set())
   const [quote, setQuote] = useState(post?.quote || '')
+  const [quoteEn, setQuoteEn] = useState(post?.quoteEn || '')
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(post?.image || '')
   const [imagePlacement, setImagePlacement] = useState(post?.imagePlacement || 'top')
   const [video, setVideo] = useState(null)
   const [videoPreview, setVideoPreview] = useState(post?.video || '')
+  const [removeVideo, setRemoveVideo] = useState(false)
   const [video2, setVideo2] = useState(null)
   const [video2Preview, setVideo2Preview] = useState(post?.video2 || '')
+  const [removeVideo2, setRemoveVideo2] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -142,6 +155,7 @@ function CreateBlogModal({ post, onClose, onSaved }) {
     if (!file) return
     setVideo(file)
     setVideoPreview(URL.createObjectURL(file))
+    setRemoveVideo(false)
   }
 
   const handleParagraphImageChange = (index, event) => {
@@ -163,6 +177,7 @@ function CreateBlogModal({ post, onClose, onSaved }) {
     if (!file) return
     setVideo2(file)
     setVideo2Preview(URL.createObjectURL(file))
+    setRemoveVideo2(false)
   }
 
   const validate = () => {
@@ -193,9 +208,12 @@ function CreateBlogModal({ post, onClose, onSaved }) {
 
     const formData = new FormData()
     formData.append('title', title.trim())
+    formData.append('titleEn', titleEn.trim())
     formData.append('tag', tag.trim())
+    formData.append('tagEn', tagEn.trim())
 
     const contentPayload = []
+    const contentEnPayload = []
     const paragraphImageFiles = []
     paragraphs
       .filter((p) => p.text.trim())
@@ -205,28 +223,42 @@ function CreateBlogModal({ post, onClose, onSaved }) {
         const hasImage = Boolean(p.imageFile || p.imagePreview)
         if (!heading && !videoSlot && !hasImage) {
           contentPayload.push(p.text.trim())
-          return
+        } else {
+          const item = { text: p.text.trim() }
+          if (heading) item.heading = heading
+          if (videoSlot) item.video = videoSlot
+          if (hasImage) {
+            if (p.imagePreview && !p.imageFile) item.image = p.imagePreview
+            item.imagePosition = p.imagePosition || 'below'
+          }
+          const index = contentPayload.length
+          contentPayload.push(item)
+          if (p.imageFile) paragraphImageFiles.push({ index, file: p.imageFile })
         }
-        const item = { text: p.text.trim() }
-        if (heading) item.heading = heading
-        if (videoSlot) item.video = videoSlot
-        if (hasImage) {
-          if (p.imagePreview && !p.imageFile) item.image = p.imagePreview
-          item.imagePosition = p.imagePosition || 'below'
+
+        const textEn = p.textEn.trim()
+        const headingEn = p.headingEn.trim()
+        if (!textEn) {
+          contentEnPayload.push('')
+        } else if (headingEn) {
+          contentEnPayload.push({ text: textEn, heading: headingEn })
+        } else {
+          contentEnPayload.push(textEn)
         }
-        const index = contentPayload.length
-        contentPayload.push(item)
-        if (p.imageFile) paragraphImageFiles.push({ index, file: p.imageFile })
       })
     formData.append('content', JSON.stringify(contentPayload))
+    formData.append('contentEn', JSON.stringify(contentEnPayload))
     paragraphImageFiles.forEach(({ index, file }) => {
       formData.append(`paragraph_image_${index}`, file)
     })
     formData.append('quote', quote.trim())
+    formData.append('quoteEn', quoteEn.trim())
     formData.append('imagePlacement', imagePlacement)
     if (image) formData.append('image', image)
     if (video) formData.append('video', video)
+    else if (removeVideo) formData.append('removeVideo', '1')
     if (video2) formData.append('video2', video2)
+    else if (removeVideo2) formData.append('removeVideo2', '1')
 
     try {
       const res = await fetch(isEditing ? `/api/blog/${post.slug}` : '/api/blog', {
@@ -309,6 +341,7 @@ function CreateBlogModal({ post, onClose, onSaved }) {
               onClear={() => {
                 setVideo(null)
                 setVideoPreview('')
+                setRemoveVideo(true)
               }}
             />
             <FileDropField
@@ -321,6 +354,7 @@ function CreateBlogModal({ post, onClose, onSaved }) {
               onClear={() => {
                 setVideo2(null)
                 setVideo2Preview('')
+                setRemoveVideo2(true)
               }}
             />
           </div>
@@ -393,6 +427,25 @@ function CreateBlogModal({ post, onClose, onSaved }) {
                         rows={3}
                         placeholder={`Párrafo ${index + 1}`}
                       />
+
+                      <div className="create-blog__translation-field">
+                        <input
+                          type="text"
+                          className="create-blog__paragraph-heading"
+                          value={paragraph.headingEn}
+                          onChange={(event) => updateParagraph(index, 'headingEn', event.target.value)}
+                          maxLength={MAX_HEADING_LEN}
+                          placeholder="Subtítulo en inglés (opcional)"
+                        />
+                        <textarea
+                          value={paragraph.textEn}
+                          onChange={(event) => updateParagraph(index, 'textEn', event.target.value)}
+                          maxLength={MAX_PARAGRAPH_LEN}
+                          rows={3}
+                          placeholder={`Paragraph ${index + 1} in English (optional)`}
+                        />
+                      </div>
+
                       <select
                         className="create-blog__paragraph-video"
                         value={paragraph.video}

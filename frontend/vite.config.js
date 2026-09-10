@@ -23,6 +23,7 @@ export default defineConfig({
       '/practicaya/uploads': gateway,
       '/practicaya/socket.io': { target: gateway, ws: true },
       '/practicantes/api': gateway,
+      '/panel/api': gateway,
     },
     watch: {
       // OneDrive bloquea brevemente los archivos recién sincronizados, lo que

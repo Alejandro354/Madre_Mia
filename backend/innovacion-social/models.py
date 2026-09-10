@@ -27,10 +27,16 @@ class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(255), unique=True, nullable=False)
     tag = db.Column(db.String(120), nullable=False)
+    tags = db.Column(db.Text, default='[]', nullable=False)
     title = db.Column(db.String(120), nullable=False)
     excerpt = db.Column(db.String(300), nullable=False)
     content = db.Column(db.Text, nullable=False)  # JSON: lista de párrafos
     quote = db.Column(db.Text, nullable=True)
+    tag_en = db.Column(db.String(120), nullable=True)
+    title_en = db.Column(db.String(120), nullable=True)
+    excerpt_en = db.Column(db.String(300), nullable=True)
+    content_en = db.Column(db.Text, default='[]', nullable=False)  # JSON: lista de párrafos (opcional)
+    quote_en = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.String(255), nullable=False)
     image_placement = db.Column(db.String(10), default='top', nullable=False)
     video_path = db.Column(db.String(255), nullable=True)
@@ -49,10 +55,16 @@ class BlogPost(db.Model):
         return {
             'slug': self.slug,
             'tag': self.tag,
+            'tags': json.loads(self.tags or '[]'),
             'title': self.title,
             'excerpt': self.excerpt,
             'content': json.loads(self.content),
             'quote': self.quote,
+            'tagEn': self.tag_en,
+            'titleEn': self.title_en,
+            'excerptEn': self.excerpt_en,
+            'contentEn': json.loads(self.content_en or '[]'),
+            'quoteEn': self.quote_en,
             'image': f'/uploads/{self.image_path}',
             'imagePlacement': self.image_placement,
             'video': f'/uploads/{self.video_path}' if self.video_path else None,

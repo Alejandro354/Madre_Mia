@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Eye, EyeOff, Zap } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Zap } from 'lucide-react';
 
 const Login = () => {
   const [roleMode, setRoleMode] = useState('estudiante'); // 'estudiante' or 'empresa'
@@ -76,12 +76,21 @@ const Login = () => {
       position: 'relative',
       padding: '1rem'
     }}>
-      {/* Top Left Logo */}
-      <div className="auth-logo-placeholder" style={{ position: 'absolute', top: '2rem', left: '3rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <div style={{ background: 'var(--color-primary)', color: 'white', padding: '4px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Zap size={20} fill="currentColor" />
+      {/* Top Left: back link + Logo */}
+      <div style={{ position: 'absolute', top: '2rem', left: '3rem', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+        <Link
+          to="/"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem', fontWeight: '600', color: 'var(--text-secondary)', textDecoration: 'none' }}
+        >
+          <ArrowLeft size={16} />
+          Volver a inicio
+        </Link>
+        <div className="auth-logo-placeholder" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ background: 'var(--color-primary)', color: 'white', padding: '4px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Zap size={20} fill="currentColor" />
+          </div>
+          <span style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>PrácticaYa</span>
         </div>
-        <span style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>PrácticaYa</span>
       </div>
 
       <div className="auth-card" style={{

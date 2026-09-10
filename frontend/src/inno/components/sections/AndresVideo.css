@@ -1,0 +1,19 @@
+.andres-video {
+  background: var(--color-bg);
+  padding: var(--space-lg) 0 var(--space-2xl);
+}
+
+.andres-video .section-header {
+  max-width: 560px;
+  margin: 0 auto var(--space-lg);
+}
+
+.andres-video__wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.andres-video__wrap .video-card {
+  width: 100%;
+  max-width: 368px;
+}
